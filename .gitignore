@@ -1,5 +1,5 @@
-*
-/*.c
-/*.h
-!README.md
-!/makefile
+*.o
+*.txt
+*.a
+*.so
+.vscode/

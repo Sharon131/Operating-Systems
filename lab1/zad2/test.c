@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-//#include "biblioteka.h"
+#include "biblioteka.h"
 #include <string.h>
 
 int main(int argc, char **argv) {
@@ -15,8 +15,8 @@ int main(int argc, char **argv) {
 
 	//char** files = 0;
 
-	//main_table mt;
-	//MT_createTable(&mt, 10);
+	main_table mt;
+	MT_createTable(&mt, 10);
 
 	char* test = calloc(17, sizeof(char));
 	char* test_a = "Ala ma";
