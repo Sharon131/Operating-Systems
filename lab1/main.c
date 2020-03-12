@@ -3,21 +3,30 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int main(void) {
+//#include "biblioteka.h"
+#include <string.h>
 
-	int som = system("diff test_a.txt test_b.txt > diff_output.txt");
-	char* diff_file = "diff_output.txt";
-	
-	int fd = open(diff_file, O_RDONLY);
-	printf("Return code form system: %d\n", som);
+int main(int argc, char **argv) {
 
-	char* buff = calloc(100, sizeof(char));
-	read(fd, buff, 100);
+	if (argc == 0) {
+		printf("Brak argumentów\n");
+		exit(-1);
+	}
 
-	printf("Zawartosc pliku diff: %s\n", buff);
+	//char** files = 0;
 
-	close(fd);
-	free(buff);
+	//main_table mt;
+	//MT_createTable(&mt, 10);
+
+	char* test = calloc(17, sizeof(char));
+	char* test_a = "Ala ma";
+	char* test_b = "może kota";
+
+	test = strcat(test, test_a);
+	test[strlen(test_a)] = ' ';
+	test = strcat(test, test_b);
+
+	printf("Zawartość test: %s\n", test);
 }
 
 
