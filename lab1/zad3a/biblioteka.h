@@ -11,6 +11,7 @@ typedef struct operation_unit {
 
 typedef struct main_table{
     char** files_seq;
+    int files_pairs_no;
     operation_unit** table;
     bool* used_units;
     int units_no;

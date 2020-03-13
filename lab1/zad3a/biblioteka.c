@@ -16,7 +16,8 @@ static void MT_createNewOperationUnit(int op_no) {
 }
 
 void MT_createTable(main_table* mt, int size) {
-    mt->files_seq = calloc(size, sizeof(char*));
+    mt ->files_seq = 0;
+    mt ->files_pairs_no = 0;
     mt->table = calloc(size, sizeof(operation_unit*));
     mt->used_units = calloc(size, sizeof(bool));
     mt->units_no = size;
@@ -24,8 +25,14 @@ void MT_createTable(main_table* mt, int size) {
 
 void MT_defineFiles(main_table* mt, char** file_names, int files_no) {
 
-    for (int i=0;i<files_no && i<mt->units_no;i+=2) {
-        
+    mt->files_pairs_no = files_no/2;
+
+    if (mt->files_seq != 0) {
+        free(mt->files_seq);
+    }
+    mt->files_seq = calloc(mt->files_pairs_no, sizeof(char*));
+
+    for (int i=0;i<files_no;i++) {
         char* file1 = file_names[i];
         char* file2 = file_names[i+1];
         int seq_len = strlen(file1) + strlen(file2) + 2;
@@ -72,11 +79,10 @@ int MT_createOperationUnitFor(main_table* mt, int file_pair_no) {
         }
     }
     //create operation_unit
-    int unit_no = file_pair_no-1;
-    mt->table[unit_no] = calloc(1, sizeof(operation_unit));
-    mt->table[unit_no]->size = operations_no;
-    mt->table[unit_no]->operations = calloc(operations_no, sizeof(char*));
-    mt->used_units[unit_no] = true;
+    mt->table[file_pair_no] = calloc(1, sizeof(operation_unit));
+    mt->table[file_pair_no]->size = operations_no;
+    mt->table[file_pair_no]->operations = calloc(operations_no, sizeof(char*));
+    mt->used_units[file_pair_no] = true;
 
     int operation_no = 0;
     for (int i=0;i<bytes_read-1;operation_no++) {
@@ -84,16 +90,16 @@ int MT_createOperationUnitFor(main_table* mt, int file_pair_no) {
         int operation_size = 0;
         while (buff[i+1]!= 10 || buff[i]=='<' || buff[i]=='>' || buff[i]=='-') {
             operation_size++;
-            i++;
         }
-        char* operation = calloc(operation_size+1, sizeof(char));  
+        char* operation = calloc(operation_size+1, sizeof(char));
+        operation[0] = 0;
         operation = strncat(operation, buff+i, operation_size);
-        mt->table[unit_no]->operations[operation_no] = operation;
+        mt->table[file_pair_no]->operations[operation_no] = operation;
         i+=operation_size;
     }
 
 
-    return unit_no;
+    return 0;
 }
 
 int MT_getOperationsCounter(operation_unit* op) {
@@ -101,26 +107,20 @@ int MT_getOperationsCounter(operation_unit* op) {
 }
 
 void MT_deleteUnit(main_table* mt, int unit_no) {
-    if (mt!=NULL && mt->used_units[unit_no]) {
+    if (mt->used_units[unit_no]) {
         mt->used_units[unit_no] = false;
         int op_no = mt->table[unit_no]->size;
         for (int i=0;i<op_no;i++) {
-            if (mt->table[unit_no]->operations[i]!=NULL){
-                free(mt->table[unit_no]->operations[i]);    
-            }
+            free(mt->table[unit_no]->operations[i]);
         }
         free(mt->table[unit_no]->operations);
         free(mt->table[unit_no]);
-        mt->used_units[unit_no] = false;
     }
 }
 
 void MT_deleteOperation(main_table* mt, int unit_no, int op_no) {
-    if (mt!=NULL && mt->used_units[unit_no]) {
-        if (mt->table[unit_no]->operations[op_no] != NULL) {
-            printf("Free: %s \n", mt->table[unit_no]->operations[op_no]);
-            free(mt->table[unit_no]->operations[op_no]);
-        }
+    if (mt->used_units[unit_no]) {
+        free(mt->table[unit_no]->operations[op_no]);
     }
 }
 

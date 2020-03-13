@@ -11,4 +11,4 @@ static_library: biblioteka.o
 biblioteka.o:
 	gcc -c biblioteka.c -o biblioteka.o
 clean: 
-	rm -f *.o
+	rm -f *.o *.a *.so
