@@ -21,9 +21,9 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		
 		MT_defineFiles(mt, argv+1, pairs_no*2);
 	
-		for (int i=0;i<pairs_no;i++) { // jak mierzyć czas osobno porównywania jak i dodawania bloków?
+		for (int i=0;i<pairs_no;i++) {
 			MT_comparePairFromDefinedFiles(mt, i);
-			MT_createOperationUnitFor(mt, i);
+			MT_createOperationUnitForLastPair(mt);
 		} 
 		
 		return pairs_no*2+1;
@@ -40,41 +40,41 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return 2;
 	}
 	else if (strcmp(command, "add_block")==0) {
-		int unit_no = argv[0];
 
-		if (unit_no > mt->units_no) {
-			printf("Block index to add is bigger than table size.\n");
-			exit(-1);
-		}
+		MT_createOperationUnitForLastPair(mt);
 
-		if (mt->used_units[unit_no]) {
-			MT_deleteUnit(mt, unit_no);
-		}
-
-		MT_createOperationUnitFor(mt, unit_no+1);
-
-		return 1;
+		return 0;
 	}
 	else if (strcmp(command, "add_and_delete")==0) {
-		int units_no = argv[0];
-		int steps_no = argv[1];
+		int units_no = atoi(argv[0]);
+		int steps_no = atoi(argv[1]);
 		
 		if(units_no > mt->units_no) {
 			printf("Number of block to add and delete bigger than table size.\n");
 			exit(-1);
 		}
 
-		for (int i=0;i<units_no;i++) {		
-			if (mt->files_seq[i] = NULL) {
-				mt->files_seq[i] = "test_a.txt test_b.txt";
-			}	
-		}
+		int* units_nos = calloc(units_no,sizeof(int));
 
 		for (int i=0;i<steps_no;i++) {
-			MT_createOperationUnitFor(mt, 0);
-			MT_deleteUnit(mt, 0);
+			for (int j=0;j<units_no;j++) {
+				units_nos[j] = MT_createOperationUnitForLastPair(mt);
+			}
+
+			for(int j=0;j<units_no;j++){
+				MT_deleteUnit(mt, units_nos[j]);
+			}
+
 		}
 		return 2;
+	}
+	else if (strcmp(command, "get_ops_no")==0) {
+		int unit_no = atoi(argv[0]);
+		int op_no = MT_getOperationsCounter(mt, unit_no);
+
+		printf("Op no for block %d: %d\n", unit_no, op_no);
+
+		return 1;
 	}
 	else {
 		printf("Not known command.\n");
@@ -129,14 +129,17 @@ int main(int argc, char **argv) {
 
 	int index = 2;
 	while (index < argc) {
-		real_time_start = times(&sys_us_time_start);
+		struct tms sys_us_time_start_w;
+		clock_t real_time_start_w = times(&sys_us_time_start_w);
 		char* command = argv[index];
 		index++;
 		index += execute_command(command, &mt, argv+index);
-		real_time_end = times(&sys_us_time_end);
+		
+		struct tms sys_us_time_end_w;
+		clock_t real_time_end_w = times(&sys_us_time_end_w);
 
 		printf("Times taken for command: %s\n", command);
-		printfTimes(real_time_start, real_time_end, &sys_us_time_start, &sys_us_time_end);
+		printfTimes(real_time_start_w, real_time_end_w, &sys_us_time_start_w, &sys_us_time_end_w);
 	}
 
 	return 0;
