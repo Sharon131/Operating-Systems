@@ -1,16 +1,14 @@
 # Makefile
 
-test_static: library
-	gcc -Wall test.c -L -lbiblioteka -o test
-test_shared: library
-	gcc -Wall test.c -L -Wl -rpath=. -lbiblioteka -o test
-test_dynamic: library
-	gcc -Wall test.c -o test
-shared_library:
-	gcc -fPIC -shared biblioteka.c -o libbiblioteka.so	
-static_library: library
+all: main
+
+main: clean static_library
+	gcc -Wall test.c -L. -lbiblioteka -o test
+
+static_library: biblioteka.o
 	ar rcs libbiblioteka.a biblioteka.o
-library:
+
+biblioteka.o:
 	gcc -c biblioteka.c -o biblioteka.o
-clean:
-	rm -f test *.o *.a *.so
+clean: 
+	rm -f main *.o *.a *.so
