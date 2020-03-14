@@ -38,7 +38,7 @@ Czas rzeczywisty: 0,01 s
 Czas użytkownika: 0,00 s
 Czas systemowy:   0,00 s
 
-8. Zapisanie w pamięci bloku o małej wielkości (3):
+8. Zapisanie w pamięci kilka razy (?) bloku o małej wielkości (3):
 Cas rzeczywisty:
 Czas użytkownika:
 Czas systemowy:

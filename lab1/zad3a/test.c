@@ -9,6 +9,8 @@
 
 #include "biblioteka.h"
 
+//Small blocks -> add txt file example from upel
+
 int execute_command(char* command, main_table* mt, char** argv) {
 	if (strcmp(command, "create_table")==0) {
 		main_table mt;
@@ -28,9 +30,33 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		
 		return pairs_no*2+1;
 	}
+	else if (strcmp(command, "compare_pairs_ntimes")==0) {
+		int pairs_no = atoi(argv[0]);
+		int compare_no = atoi(argv[1]);
+
+		MT_defineFiles(mt, argv+1, pairs_no*2);
+	
+		for (int i=0;i<pairs_no;i++) {
+			for (int j=0;j<compare_no;j++) {
+				MT_comparePairFromDefinedFiles(mt, i);
+				MT_createOperationUnitForLastPair(mt);
+			}
+		} 
+		
+		return pairs_no*2+2;
+	}
 	else if (strcmp(command, "remove_block")==0) {
 		int unit_no = atoi(argv[0]);
 		MT_deleteUnit(mt, unit_no);
+		return 1;
+	}
+	else if (strcmp(command, "remove_nfirst_blocks")==0) {
+		int units_no = atoi(argv[0]);
+
+		for (int i=0;i<units_no;i++) {
+			MT_deleteUnit(mt, i);
+		}
+
 		return 1;
 	}
 	else if (strcmp(command, "remove_operation")==0) {
@@ -40,10 +66,13 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return 2;
 	}
 	else if (strcmp(command, "add_block")==0) {
+		int units_no = atoi(argv[0]);
 
-		MT_createOperationUnitForLastPair(mt);
+		for (int i=0;i<units_no;i++) {
+			MT_createOperationUnitForLastPair(mt);
+		}
 
-		return 0;
+		return 1;
 	}
 	else if (strcmp(command, "add_and_delete")==0) {
 		int units_no = atoi(argv[0]);
