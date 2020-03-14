@@ -1,5 +1,6 @@
 *.o
 *.txt
+!raport*.txt
 *.a
 *.so
 .vscode/

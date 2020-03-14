@@ -1,0 +1,71 @@
+Raport z zadania 2 zestawu 1.
+
+1. Tworzenie tablicy o 5 000 000 blokach:
+Czas rzeczywisty: 0,11 s
+Czas użytkownika: 0,01 s
+Czas systemowy:   0,09 s
+
+2. Porównanie małej ilości plików (5) o średnim stopniu podobieństwa.
+Czas rzeczywisty: 0,09 s
+Czas użytkownika: 0,00 s 
+Czas systemowy:   0,02 s
+
+3. Porównanie średniej ilości plików:
+Czas rzeczywisty:
+Czas użytkownika:
+Czas systemowy:
+
+4. Porównanie dużej ilości plików:
+Czas rzeczywisty:
+Czas użytkownika:
+Czas systemowy:
+
+5. Porównanie 1 pary plików podobnych do siebie:
+Czas rzeczywisty: 0,02 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+6. Porównanie 1 pary plików średnio podobnych do siebie:
+Czas rzeczywisty: 0,01 s
+Czas użytkownika: 0,01 s
+Czas systemowy:   0,00
+
+7. Porównanie 1 pary plików niepodobnych do siebie:
+Czas rzeczywisty: 0,01 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+8. Zapisanie w pamięci bloku o małej wielkości (3):
+Cas rzeczywisty:
+Czas użytkownika:
+Czas systemowy:
+
+9. Zapisanie w pamięci bloku o średniej wielkości (22):
+Czas rzeczywisty: 0,00 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+10. Zapisanie w pamięci bloku o dużej wielkości (573):
+Czas rzeczywisty: 0,00 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+11. Usunięcie bloku o małym rozmiarze (3):
+Czas rzeczywisty: 0,00 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+12. Usunięcie bloku o średnim rozmiarze (22):
+Czas rzeczywisty: 0,00 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+13. Usunięcie bloku o dużym rozmiarze (573):
+Czas rzeczywisty: 0,00 s
+Czas użytkownika: 0,00 s
+Czas systemowy:   0,00 s
+
+14. Kilkakrotne dodanie i usunięcie 100 bloków o rozmiarze 573 100 razy:
+Czas rzeczywisty: 3,08 s
+Czas użytkownika: 2,86 s
+Czas systemowy:   0,23 s
