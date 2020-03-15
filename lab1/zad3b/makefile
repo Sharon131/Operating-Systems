@@ -1,5 +1,5 @@
 # Makefile
-FILE=report.txt
+FILE=raport.txt
 all: main
 
 tests: main test_static test_shared test_dynamic
@@ -19,7 +19,7 @@ biblioteka.o:
 	gcc -c biblioteka.c -o biblioteka.o
 
 clean: 
-	rm -f main *.o *.a *.so $(FILE)
+	rm -f main *.o *.a *.so raport.txt
 
 test_static: main
 	echo '--------------------------------' >> $(FILE)
