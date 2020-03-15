@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 
+// Update file in previous exs.
 #define FILE_BUFF_SIZE  1000000
 
 char* temp_file_name = "diff_out.txt";
@@ -142,4 +143,19 @@ void MT_deleteOperation(main_table* mt, int unit_no, int op_no) {
     }
 }
 
+void MT_deleteTable(main_table* mt) {
+    if (mt != NULL) {
+        for (int i=0;i<mt->units_no;i++) {
+            if (mt->table!= NULL && mt->table[i] != NULL) {
+                for (int j=0;j<mt->table[i]->size;j++) {
+                    if (mt->table[i]->operations[j] != NULL) {
+                        free(mt->table[i]->operations[j]);
+                    }
+                    free(mt->table[i]->operations);
+                }
+                free(mt->table[i]);
+            }
+        }
+    }
+}
 

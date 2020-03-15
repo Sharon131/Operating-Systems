@@ -1,5 +1,8 @@
 Raport z zadania 2 zestawu 1.
 
+Uwagi:
+Czasy zostały zmierzone dla biblioteki statycznej. 
+
 1. Tworzenie tablicy o 5 000 000 blokach:
 Czas rzeczywisty: 0,11 s
 Czas użytkownika: 0,01 s
@@ -10,15 +13,15 @@ Czas rzeczywisty: 0,09 s
 Czas użytkownika: 0,00 s 
 Czas systemowy:   0,02 s
 
-3. Porównanie średniej ilości plików:
-Czas rzeczywisty:
-Czas użytkownika:
-Czas systemowy:
+3. Porównanie średniej ilości plików (50):
+Czas rzeczywisty: 0,10 s
+Czas użytkownika: 0,01 s
+Czas systemowy:   0,00 s
 
-4. Porównanie dużej ilości plików:
-Czas rzeczywisty:
-Czas użytkownika:
-Czas systemowy:
+4. Porównanie dużej ilości plików (500):
+Czas rzeczywisty: 1,41 s
+Czas użytkownika: 0,12 s
+Czas systemowy:   0,25 s
 
 5. Porównanie 1 pary plików podobnych do siebie:
 Czas rzeczywisty: 0,02 s

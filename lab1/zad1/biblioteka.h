@@ -26,6 +26,7 @@ int MT_getOperationsCounter(main_table* mt, int unit_no);
 
 void MT_deleteUnit(main_table* mt, int unit_no);
 void MT_deleteOperation(main_table* mt, int unit_no, int op_no);
+void MT_deleteTable(main_table* mt);
 
 #endif
 
