@@ -91,7 +91,7 @@ test_dynamic: main
 	echo '--------------------------------' >> $(FILE)
 	echo 'dynamic library' >> $(FILE)
 	echo 'create table of size 50 000 000' >> $(FILE)
-	./test_dynamic 50000000 create_table
+	./test_dynamic 50000000 create_table | tee -a $(FILE)
 	echo ' ' >> $(FILE)
 	echo 'compare different number of pairs' >> $(FILE)
 	echo 'compare 5 pairs' >> $(FILE)

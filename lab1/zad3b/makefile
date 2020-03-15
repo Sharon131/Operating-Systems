@@ -1,29 +1,38 @@
 # Makefile
-FILE=raport.txt
+FILE=report.txt
 all: main
+
+optimalization_tests: clean_file
+	make tests opt=0
+	make tests opt=1
+	make tests opt=2
+	make tests opt=s
 
 tests: main test_static test_shared test_dynamic
 
 main: clean static_library shared_library
-	gcc -Wall test.c -static -L. -lbiblioteka -o test_static
-	gcc -Wall test.c -L. -Wl,-rpath=. -lbiblioteka -o test_shared
-	gcc -Wall test.c -o test_dynamic -ldl -D DLL
+	gcc -Wall test.c -static -L. -lbiblioteka -o test_static -O$(opt)
+	gcc -Wall test.c -L. -Wl,-rpath=. -lbiblioteka -o test_shared -O$(opt)
+	gcc -Wall test.c -o test_dynamic -ldl -D DLL -O$(opt)
 
 static_library: biblioteka.o
 	ar rcs libbiblioteka.a biblioteka.o
 
 shared_library:
-	gcc -fPIC -shared biblioteka.c -o libbiblioteka.so
+	gcc -fPIC -shared biblioteka.c -o libbiblioteka.so -O$(opt)
 
 biblioteka.o:
-	gcc -c biblioteka.c -o biblioteka.o
+	gcc -c biblioteka.c -o biblioteka.o -O$(opt)
 
 clean: 
-	rm -f main *.o *.a *.so raport.txt
+	rm -f main *.o *.a *.so
+
+clean_file:
+	rm -f $(FILE)
 
 test_static: main
 	echo '--------------------------------' >> $(FILE)
-	echo 'static library' >> $(FILE)
+	echo 'static library optimalization -O$(opt)' >> $(FILE)
 	echo 'create table of size 50 000 000' >> $(FILE)
 	./test_static 50000000 create_table | tee -a $(FILE)
 	echo ' ' >> $(FILE)
@@ -56,7 +65,7 @@ test_static: main
 
 test_shared: main
 	echo '--------------------------------' >> $(FILE)
-	echo 'shared library' >> $(FILE)
+	echo 'shared library optimalization -O$(opt)' >> $(FILE)
 	echo 'create table of size 50 000 000' >> $(FILE)
 	./test_shared 50000000 create_table | tee -a $(FILE)
 	echo ' ' >> $(FILE)
@@ -89,9 +98,9 @@ test_shared: main
 
 test_dynamic: main
 	echo '--------------------------------' >> $(FILE)
-	echo 'dynamic library' >> $(FILE)
+	echo 'dynamic library optimalization -O$(opt)' >> $(FILE)
 	echo 'create table of size 50 000 000' >> $(FILE)
-	./test_dynamic 50000000 create_table
+	./test_dynamic 50000000 create_table | tee -a $(FILE)
 	echo ' ' >> $(FILE)
 	echo 'compare different number of pairs' >> $(FILE)
 	echo 'compare 5 pairs' >> $(FILE)

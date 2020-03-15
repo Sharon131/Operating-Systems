@@ -1,109 +1,26 @@
 Raport do zadania 3a z zestawu 1.
 
 Uwagi:
-Generalnie czas wykonania poszczególnych komend niezależy od
-rodzaju biblioteki. Wyjątkiem jest tworzenie tablicy, które
-dla biblioteki ładowanej dynamicznie zajmuje o wiele mniej czasu.
+Przyglądając się poniższym wynikom można wywnioskować, że
+czas wykonania poszczególnych operacji i komend w pewnym
+stopniu zależy od poziomu optymalizacji. Największa różnica
+jest miedzy optymalizacją -O0 a -O1: czas działania jest
+prawie dwa razy mniejszy. NAtomiast między optymalizacjami
+-O1, -O2 i -Os nie ma większej różnicy w czasie działania.
+Wręcz wraz ze zwiększaniem poziomu optymalizacji czasy wykonania
+odrobinę rosną, jednakże może to być spowodowane warunkami
+zewnętrznymi, jak inne procesy.
+Wszystkie te zależności najlepiej widać na czasach wykonania
+komendy dodania i usunięcia naprzemian 100 bloków po 100 razy
+(add_and_remove), ponieważ są one największe.
 
 --------------------------------
-static library
+static library optimalization -O0
 create table of size 50 000 000
 Times of table creating of size 50000000:
 Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
- 
-compare different number of pairs
-compare 5 pairs
-Times taken for command: compare_pairs_ntimes
-Real time: 0.010000 s
-User time: 0.000000 s
-System time: 0.000000 s
-compare 50 pairs
-Times taken for command: compare_pairs_ntimes
-Real time: 0.100000 s
-User time: 0.010000 s
-System time: 0.000000 s
-compare 500 pairs
-Times taken for command: compare_pairs_ntimes
-Real time: 1.350000 s
-User time: 0.130000 s
-System time: 0.210000 s
- 
-compare differently similar pairs
-compare quite similar files
-Times taken for command: compare_pairs_ntimes
-Real time: 0.120000 s
-User time: 0.000000 s
-System time: 0.000000 s
-compare no so similar files
-Times taken for command: compare_pairs_ntimes
-Real time: 0.220000 s
-User time: 0.020000 s
-System time: 0.020000 s
-compare not similar files
-Times taken for command: compare_pairs_ntimes
-Real time: 0.300000 s
-User time: 0.040000 s
-System time: 0.020000 s
- 
-add then remove 1000 blocks
-Small blocks
-Times taken for command: compare_pairs
-Real time: 0.000000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Times taken for command: add_block
-Real time: 0.010000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Times taken for command: remove_nfirst_blocks
-Real time: 0.000000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Medium blocks
-Times taken for command: compare_pairs
-Real time: 0.000000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Times taken for command: add_block
-Real time: 0.010000 s
-User time: 0.010000 s
-System time: 0.000000 s
-Times taken for command: remove_nfirst_blocks
-Real time: 0.000000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Big blocks
-Times taken for command: compare_pairs
-Real time: 0.010000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Times taken for command: add_block
-Real time: 0.280000 s
-User time: 0.240000 s
-System time: 0.030000 s
-Times taken for command: remove_nfirst_blocks
-Real time: 0.010000 s
-User time: 0.010000 s
-System time: 0.000000 s
- 
-add and delete 100 blocks 100 times
-Times taken for command: compare_pairs
-Real time: 0.000000 s
-User time: 0.000000 s
-System time: 0.000000 s
-Times taken for command: add_and_delete
-Real time: 3.120000 s
-User time: 2.810000 s
-System time: 0.300000 s
---------------------------------
-shared library
-create table of size 50 000 000
-Times of table creating of size 50000000:
-Real time: 0.100000 s
-User time: 0.010000 s
-System time: 0.080000 s
  
 compare different number of pairs
 compare 5 pairs
@@ -114,30 +31,30 @@ System time: 0.000000 s
 compare 50 pairs
 Times taken for command: compare_pairs_ntimes
 Real time: 0.110000 s
-User time: 0.010000 s
+User time: 0.020000 s
 System time: 0.000000 s
 compare 500 pairs
 Times taken for command: compare_pairs_ntimes
-Real time: 1.380000 s
-User time: 0.120000 s
-System time: 0.240000 s
+Real time: 1.560000 s
+User time: 0.150000 s
+System time: 0.280000 s
  
 compare differently similar pairs
 compare quite similar files
 Times taken for command: compare_pairs_ntimes
-Real time: 0.120000 s
+Real time: 0.130000 s
 User time: 0.000000 s
-System time: 0.010000 s
-compare not so similar files
+System time: 0.000000 s
+compare no so similar files
 Times taken for command: compare_pairs_ntimes
 Real time: 0.220000 s
 User time: 0.020000 s
-System time: 0.020000 s
+System time: 0.010000 s
 compare not similar files
 Times taken for command: compare_pairs_ntimes
 Real time: 0.300000 s
-User time: 0.040000 s
-System time: 0.020000 s
+User time: 0.050000 s
+System time: 0.010000 s
  
 add then remove 1000 blocks
 Small blocks
@@ -146,7 +63,7 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_block
-Real time: 0.000000 s
+Real time: 0.010000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: remove_nfirst_blocks
@@ -159,8 +76,8 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_block
-Real time: 0.020000 s
-User time: 0.000000 s
+Real time: 0.010000 s
+User time: 0.010000 s
 System time: 0.000000 s
 Times taken for command: remove_nfirst_blocks
 Real time: 0.000000 s
@@ -168,15 +85,15 @@ User time: 0.000000 s
 System time: 0.000000 s
 Big blocks
 Times taken for command: compare_pairs
-Real time: 0.000000 s
+Real time: 0.010000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_block
-Real time: 0.280000 s
+Real time: 0.300000 s
 User time: 0.250000 s
-System time: 0.030000 s
+System time: 0.040000 s
 Times taken for command: remove_nfirst_blocks
-Real time: 0.020000 s
+Real time: 0.010000 s
 User time: 0.010000 s
 System time: 0.000000 s
  
@@ -186,41 +103,45 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_and_delete
-Real time: 3.110000 s
-User time: 2.880000 s
-System time: 0.220000 s
+Real time: 3.160000 s
+User time: 2.890000 s
+System time: 0.250000 s
 --------------------------------
-dynamic library
+shared library optimalization -O0
 create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.100000 s
  
 compare different number of pairs
 compare 5 pairs
 Times taken for command: compare_pairs_ntimes
-Real time: 0.020000 s
+Real time: 0.060000 s
 User time: 0.000000 s
 System time: 0.000000 s
 compare 50 pairs
 Times taken for command: compare_pairs_ntimes
-Real time: 0.100000 s
-User time: 0.020000 s
-System time: 0.000000 s
+Real time: 0.110000 s
+User time: 0.010000 s
+System time: 0.010000 s
 compare 500 pairs
 Times taken for command: compare_pairs_ntimes
-Real time: 1.410000 s
-User time: 0.130000 s
-System time: 0.250000 s
+Real time: 1.540000 s
+User time: 0.110000 s
+System time: 0.310000 s
  
 compare differently similar pairs
 compare quite similar files
 Times taken for command: compare_pairs_ntimes
 Real time: 0.130000 s
-User time: 0.010000 s
+User time: 0.000000 s
 System time: 0.000000 s
 compare not so similar files
 Times taken for command: compare_pairs_ntimes
-Real time: 0.240000 s
-User time: 0.040000 s
-System time: 0.000000 s
+Real time: 0.220000 s
+User time: 0.030000 s
+System time: 0.010000 s
 compare not similar files
 Times taken for command: compare_pairs_ntimes
 Real time: 0.320000 s
@@ -234,6 +155,742 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.290000 s
+User time: 0.270000 s
+System time: 0.010000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 3.340000 s
+User time: 3.040000 s
+System time: 0.290000 s
+--------------------------------
+dynamic library optimalization -O0
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.120000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.770000 s
+User time: 0.120000 s
+System time: 0.370000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.150000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.260000 s
+User time: 0.040000 s
+System time: 0.010000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.330000 s
+User time: 0.060000 s
+System time: 0.010000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.310000 s
+User time: 0.270000 s
+System time: 0.030000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 3.350000 s
+User time: 3.010000 s
+System time: 0.330000 s
+--------------------------------
+static library optimalization -O1
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.100000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.450000 s
+User time: 0.040000 s
+System time: 0.300000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.120000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare no so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.200000 s
+User time: 0.010000 s
+System time: 0.010000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.280000 s
+User time: 0.010000 s
+System time: 0.030000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.160000 s
+User time: 0.120000 s
+System time: 0.030000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 1.670000 s
+User time: 1.340000 s
+System time: 0.330000 s
+--------------------------------
+shared library optimalization -O1
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.090000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.090000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.540000 s
+User time: 0.080000 s
+System time: 0.290000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.160000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.290000 s
+User time: 0.020000 s
+System time: 0.010000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.380000 s
+User time: 0.020000 s
+System time: 0.030000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.200000 s
+User time: 0.150000 s
+System time: 0.040000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 2.080000 s
+User time: 1.730000 s
+System time: 0.330000 s
+--------------------------------
+dynamic library optimalization -O1
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.130000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 2.090000 s
+User time: 0.100000 s
+System time: 0.350000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.170000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.290000 s
+User time: 0.010000 s
+System time: 0.020000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.370000 s
+User time: 0.020000 s
+System time: 0.030000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.200000 s
+User time: 0.150000 s
+System time: 0.050000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 1.900000 s
+User time: 1.580000 s
+System time: 0.310000 s
+--------------------------------
+static library optimalization -O2
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.110000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.800000 s
+User time: 0.110000 s
+System time: 0.300000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.160000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare no so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.280000 s
+User time: 0.010000 s
+System time: 0.020000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.390000 s
+User time: 0.030000 s
+System time: 0.020000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.220000 s
+User time: 0.150000 s
+System time: 0.070000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 1.930000 s
+User time: 1.630000 s
+System time: 0.280000 s
+--------------------------------
+shared library optimalization -O2
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.100000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.820000 s
+User time: 0.140000 s
+System time: 0.300000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.170000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.300000 s
+User time: 0.020000 s
+System time: 0.020000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.420000 s
+User time: 0.030000 s
+System time: 0.030000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.230000 s
+User time: 0.190000 s
+System time: 0.040000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 2.000000 s
+User time: 1.650000 s
+System time: 0.340000 s
+--------------------------------
+dynamic library optimalization -O2
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.100000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.780000 s
+User time: 0.070000 s
+System time: 0.330000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.170000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.280000 s
+User time: 0.010000 s
+System time: 0.030000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.420000 s
+User time: 0.020000 s
+System time: 0.040000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.220000 s
+User time: 0.170000 s
+System time: 0.040000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 1.910000 s
+User time: 1.610000 s
+System time: 0.290000 s
+--------------------------------
+static library optimalization -Os
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.810000 s
+User time: 0.090000 s
+System time: 0.300000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.160000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare no so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.270000 s
+User time: 0.030000 s
+System time: 0.010000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.380000 s
+User time: 0.030000 s
+System time: 0.020000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
 Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
@@ -260,11 +917,11 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_block
-Real time: 0.300000 s
-User time: 0.260000 s
-System time: 0.030000 s
+Real time: 0.220000 s
+User time: 0.170000 s
+System time: 0.040000 s
 Times taken for command: remove_nfirst_blocks
-Real time: 0.000000 s
+Real time: 0.010000 s
 User time: 0.010000 s
 System time: 0.000000 s
  
@@ -274,6 +931,190 @@ Real time: 0.000000 s
 User time: 0.000000 s
 System time: 0.000000 s
 Times taken for command: add_and_delete
-Real time: 3.110000 s
-User time: 2.790000 s
-System time: 0.300000 s
+Real time: 1.990000 s
+User time: 1.670000 s
+System time: 0.310000 s
+--------------------------------
+shared library optimalization -Os
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.110000 s
+User time: 0.010000 s
+System time: 0.090000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.110000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.880000 s
+User time: 0.120000 s
+System time: 0.370000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.150000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.280000 s
+User time: 0.010000 s
+System time: 0.020000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.380000 s
+User time: 0.040000 s
+System time: 0.020000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.250000 s
+User time: 0.210000 s
+System time: 0.030000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 2.290000 s
+User time: 1.990000 s
+System time: 0.290000 s
+--------------------------------
+dynamic library optimalization -Os
+create table of size 50 000 000
+Times of table creating of size 50000000:
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+ 
+compare different number of pairs
+compare 5 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.020000 s
+User time: 0.000000 s
+System time: 0.000000 s
+compare 50 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 0.110000 s
+User time: 0.010000 s
+System time: 0.000000 s
+compare 500 pairs
+Times taken for command: compare_pairs_ntimes
+Real time: 1.850000 s
+User time: 0.100000 s
+System time: 0.350000 s
+ 
+compare differently similar pairs
+compare quite similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.160000 s
+User time: 0.000000 s
+System time: 0.010000 s
+compare not so similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.280000 s
+User time: 0.020000 s
+System time: 0.020000 s
+compare not similar files
+Times taken for command: compare_pairs_ntimes
+Real time: 0.380000 s
+User time: 0.020000 s
+System time: 0.030000 s
+ 
+add then remove 1000 blocks
+Small blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Medium blocks
+Times taken for command: compare_pairs
+Real time: 0.010000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Big blocks
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_block
+Real time: 0.250000 s
+User time: 0.210000 s
+System time: 0.030000 s
+Times taken for command: remove_nfirst_blocks
+Real time: 0.010000 s
+User time: 0.010000 s
+System time: 0.000000 s
+ 
+add and delete 100 blocks 100 times
+Times taken for command: compare_pairs
+Real time: 0.000000 s
+User time: 0.000000 s
+System time: 0.000000 s
+Times taken for command: add_and_delete
+Real time: 2.280000 s
+User time: 1.950000 s
+System time: 0.310000 s
