@@ -6,3 +6,6 @@
 .vscode/
 test
 main
+test_static
+test_shared
+test_dynamic

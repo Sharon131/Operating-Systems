@@ -7,18 +7,45 @@
 #include <sys/times.h>
 #include <stdbool.h>
 
+#ifndef DLL
 #include "biblioteka.h"
+#endif
 
-//Small blocks -> add txt file example from upel
+#ifdef DLL
+#include <dlfcn.h>
+void* dll;
+typedef struct operation_unit {
+    char** operations;
+    int size;
+
+} operation_unit;
+typedef struct main_table{
+    char** files_seq;
+    operation_unit** table;
+    bool* used_units;
+    int units_no;
+} main_table;
+#endif
 
 int execute_command(char* command, main_table* mt, char** argv) {
+	
 	if (strcmp(command, "create_table")==0) {
+		#ifdef DLL
+	    void (*MT_createTable) (main_table* mt, int size) = dlsym(dll, "MT_createTable");
+    	#endif
+
 		main_table mt;
 		int mt_size = atoi(argv[0]);
 		MT_createTable(&mt, mt_size);
 		return 1;
 	}
 	else if (strcmp(command, "compare_pairs")==0) {
+		#ifdef DLL
+		void (*MT_defineFiles) (main_table*, char**, int) = dlsym(dll, "MT_defineFiles");
+		void (*MT_comparePairFromDefinedFiles) (main_table*, int) = dlsym(dll, "MT_comparePairFromDefinedFiles");
+		int (*MT_createOperationUnitForLastPair) (main_table*) = dlsym(dll, "MT_createOperationUnitForLastPair");
+		#endif
+
 		int pairs_no = atoi(argv[0]);
 		
 		MT_defineFiles(mt, argv+1, pairs_no*2);
@@ -31,10 +58,16 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return pairs_no*2+1;
 	}
 	else if (strcmp(command, "compare_pairs_ntimes")==0) {
+		#ifdef DLL
+		void (*MT_defineFiles) (main_table*, char**, int) = dlsym(dll, "MT_defineFiles");
+		void (*MT_comparePairFromDefinedFiles) (main_table*, int) = dlsym(dll, "MT_comparePairFromDefinedFiles");
+		int (*MT_createOperationUnitForLastPair) (main_table*) = dlsym(dll, "MT_createOperationUnitForLastPair");
+		#endif
+		
 		int pairs_no = atoi(argv[0]);
 		int compare_no = atoi(argv[1]);
 
-		MT_defineFiles(mt, argv+1, pairs_no*2);
+		MT_defineFiles(mt, argv+2, pairs_no*2);
 	
 		for (int i=0;i<pairs_no;i++) {
 			for (int j=0;j<compare_no;j++) {
@@ -46,11 +79,19 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return pairs_no*2+2;
 	}
 	else if (strcmp(command, "remove_block")==0) {
+		#ifdef DLL
+		void (*MT_deleteUnit) (main_table*, int) = dlsym(dll, "MT_deleteUnit");
+		#endif
+
 		int unit_no = atoi(argv[0]);
 		MT_deleteUnit(mt, unit_no);
 		return 1;
 	}
 	else if (strcmp(command, "remove_nfirst_blocks")==0) {
+		#ifdef DLL
+		void (*MT_deleteUnit) (main_table*, int) = dlsym(dll, "MT_deleteUnit");
+		#endif		
+		
 		int units_no = atoi(argv[0]);
 
 		for (int i=0;i<units_no;i++) {
@@ -60,12 +101,20 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return 1;
 	}
 	else if (strcmp(command, "remove_operation")==0) {
+		#ifdef DLL
+		void (*MT_deleteOperation) (main_table*, int, int) = dlsym(dll, "MT_deleteOperation");
+		#endif		
+		
 		int unit_no = atoi(argv[0]);
 		int op_no = atoi(argv[1]);
 		MT_deleteOperation(mt, unit_no, op_no);
 		return 2;
 	}
 	else if (strcmp(command, "add_block")==0) {
+		#ifdef DLL
+		void (*MT_createOperationUnitForLastPair) (main_table*) = dlsym(dll, "MT_createOperationUnitForLastPair");
+		#endif		
+		
 		int units_no = atoi(argv[0]);
 
 		for (int i=0;i<units_no;i++) {
@@ -75,6 +124,11 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return 1;
 	}
 	else if (strcmp(command, "add_and_delete")==0) {
+		#ifdef DLL
+		int (*MT_createOperationUnitForLastPair) (main_table*) = dlsym(dll, "MT_createOperationUnitForLastPair");
+		void (*MT_deleteUnit) (main_table*, int) = dlsym(dll, "MT_deleteUnit");
+		#endif		
+		
 		int units_no = atoi(argv[0]);
 		int steps_no = atoi(argv[1]);
 		
@@ -98,6 +152,10 @@ int execute_command(char* command, main_table* mt, char** argv) {
 		return 2;
 	}
 	else if (strcmp(command, "get_ops_no")==0) {
+		#ifdef DLL
+		int (*MT_getOperationsCounter) (main_table*, int) = dlsym(dll, "MT_getOperationsCounter");
+		#endif		
+		
 		int unit_no = atoi(argv[0]);
 		int op_no = MT_getOperationsCounter(mt, unit_no);
 
@@ -137,26 +195,41 @@ bool checkArgs(int argc, char** argv) {
 }
 
 int main(int argc, char **argv) {
+	#ifdef DLL
+    dll = dlopen("./libbiblioteka.so", RTLD_LAZY);
+
+    void (*MT_createTable) (main_table* mt, int size) = dlsym(dll, "MT_createTable");
+    //void (*MT_deleteTable) (main_table* mt) = dlsym(dll, "MT_deleteTable");
+	#endif
 
 	if (!checkArgs(argc, argv))		exit(-1);
 
 	int mt_size = atoi(argv[1]);
 
-	struct tms sys_us_time_start;
-	clock_t real_time_start = times(&sys_us_time_start);
-	
 	main_table mt;
-	MT_createTable(&mt, mt_size);
 
+	struct tms sys_us_time_start;
+	clock_t real_time_start;
 	struct tms sys_us_time_end;
 	clock_t real_time_end;
-	
-	real_time_end = times(&sys_us_time_end);
-
-	printf("Times of table creating:\n");
-	printfTimes(real_time_start, real_time_end, &sys_us_time_start, &sys_us_time_end);
-
+		
 	int index = 2;
+
+	if (strcmp(argv[2], "create_table")==0) {
+		index++;
+
+		real_time_start = times(&sys_us_time_start);
+		
+		MT_createTable(&mt, mt_size);
+
+		real_time_end = times(&sys_us_time_end);
+
+		printf("Times of table creating of size %d:\n", mt_size);
+		printfTimes(real_time_start, real_time_end, &sys_us_time_start, &sys_us_time_end);
+	} else {
+		MT_createTable(&mt, mt_size);
+	}
+
 	while (index < argc) {
 		struct tms sys_us_time_start_w;
 		clock_t real_time_start_w = times(&sys_us_time_start_w);
@@ -171,8 +244,12 @@ int main(int argc, char **argv) {
 		printfTimes(real_time_start_w, real_time_end_w, &sys_us_time_start_w, &sys_us_time_end_w);
 	}
 
-	return 0;
+	//MT_deleteTable(&mt);
+	#ifdef DLL
+    dlclose(dll);
+	#endif
 
+	return 0;
 }
 
 
