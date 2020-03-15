@@ -3,6 +3,7 @@
 !raport*.txt
 *.a
 *.so
+*.tar.gz
 .vscode/
 test
 main
