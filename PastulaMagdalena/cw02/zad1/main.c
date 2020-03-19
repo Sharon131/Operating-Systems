@@ -122,28 +122,26 @@ void generate(char* file_name, int records_no, int record_len) {
 
     int fp = creat(file_name, S_IRWXU | S_IRWXG | S_IRWXO);
 
-    char* to_write = calloc(records_no*record_len+1, sizeof(char));
     int record_indx = 0;
-    int offset = 0;
-
-    while (record_indx < records_no) {
+    char* to_write = calloc(record_len, sizeof(char));
         
+    while (record_indx < records_no) {
         for (int i=0;i<record_len-1;i++) {
-            to_write[i+offset] = rand_char();
+            to_write[i] = rand_char();
         }
-        to_write[offset+record_len-1] = '\n';
-        offset += record_len;
+        to_write[record_len-1] = '\n';
+        write(fp, to_write, record_len);
         record_indx++;
     }
 
-    write(fp, to_write, records_no*record_len);
+    free(to_write);
 
     close(fp);
 }
 
 bool isFirstLesser(char* rec1, char* rec2, int rec_len) {
 
-    for (int i=0;i<rec_len-1;i++) {
+    for (int i=0;i<rec_len;i++) {
         if ((unsigned int)rec1[i] > (unsigned int)rec2[i]) {
             return false;
         }
@@ -154,20 +152,19 @@ bool isFirstLesser(char* rec1, char* rec2, int rec_len) {
 int partition(char** records, int l, int r, int rec_len) {
     int pivot = l;
 
-    int i = l;
+    int i = l+1;
     for (int j=l+1;j<=r;j++) {
-        printf("i: %d, j: %d\n", i, j);
         if (isFirstLesser(records[j], records[pivot], rec_len)) {
-            i++;
             char* tmp = records[j];
             records[j] = records[i];
             records[i] = tmp;
+            i++;
         }
     }
-    char* tmp = records[i+1];
-    records[i+1] = records[pivot];
+    char* tmp = records[i-1];
+    records[i-1] = records[pivot];
     records[pivot] = tmp;
-    return i+1;
+    return i-1;
 }
 
 void quick_sort(char** records, int l, int r, int record_len) {
@@ -180,7 +177,7 @@ void quick_sort(char** records, int l, int r, int record_len) {
 }
 
 void sort_records(char** records, int records_no, int record_len) {
-    quick_sort(records, 0, records_no-1, record_len);
+    quick_sort(records, 0, records_no-1, record_len-1);
 }
 
 void sort_lib(char* file_name, int records_no, int record_len) {
@@ -192,7 +189,7 @@ void sort_lib(char* file_name, int records_no, int record_len) {
         records[i] = calloc(record_len, sizeof(char));
         fread(records[i], record_len, record_len, fp);
         records[i][record_len-1] = 0;
-        printf("Record %d: %s", i, records[i]);
+        //printf("Record %d: %s", i, records[i]);
     }
 
     sort_records(records, records_no, record_len);
@@ -224,7 +221,6 @@ void sort_sys(char* file_name, int records_no, int record_len) {
         records[i] = calloc(record_len, sizeof(char));
         read(fp, records[i], record_len);
         records[i][record_len-1] = 0;
-        printf("Record %d: %s\n", i, records[i]);
     }
     
     sort_records(records, records_no, record_len);
