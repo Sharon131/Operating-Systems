@@ -142,57 +142,66 @@ void generate(char* file_name, int records_no, int record_len) {
 bool isFirstLesser(char* rec1, char* rec2, int rec_len) {
 
     for (int i=0;i<rec_len;i++) {
-        if ((unsigned int)rec1[i] > (unsigned int)rec2[i]) {
+        if ((unsigned int)rec1[i] < (unsigned int)rec2[i]) {
+            return true;
+        } else if ((unsigned int)rec1[i] > (unsigned int)rec2[i]) {
             return false;
         }
     }
-    return true;
+    return false;
 }
 
-int partition(char** records, int l, int r, int rec_len) {
-    int pivot = l;
+int partition_lib(FILE* fp, int l, int r, int rec_len){
+    
+    fseek (fp, l*rec_len, 0);
+    char* pivot_char = calloc(rec_len, sizeof(char));
+    fread(pivot_char, sizeof(char), rec_len, fp);
+    char* record_j = calloc(rec_len, sizeof(char));
+    char* record_i = calloc(rec_len, sizeof(char));
 
-    int i = l+1;
+    int i=l+1;
     for (int j=l+1;j<=r;j++) {
-        if (isFirstLesser(records[j], records[pivot], rec_len)) {
-            char* tmp = records[j];
-            records[j] = records[i];
-            records[i] = tmp;
+        fseek(fp, j*rec_len, 0);
+        fread(record_j, sizeof(char), rec_len, fp);
+
+        if (isFirstLesser(record_j, pivot_char, rec_len)) {
+            fseek(fp, i*rec_len, 0);
+            fread(record_i, sizeof(char), rec_len, fp);
+            fseek(fp, i*rec_len, 0);
+            fwrite(record_j, sizeof(char), rec_len, fp);
+            fseek(fp, j*rec_len, 0);
+            fwrite(record_i, sizeof(char), rec_len, fp);
             i++;
         }
     }
-    char* tmp = records[i-1];
-    records[i-1] = records[pivot];
-    records[pivot] = tmp;
+
+    fseek(fp, (i-1)*rec_len, 0);
+    fread(record_i, sizeof(char), rec_len, fp);
+    fseek(fp, (i-1)*rec_len, 0);
+    fwrite(pivot_char, sizeof(char), rec_len, fp);
+    fseek(fp, l*rec_len, 0);
+    fwrite(record_i, sizeof(char), rec_len, fp);
+
+    free(pivot_char);
+    free(record_j);
+    free(record_i);
+    
     return i-1;
 }
 
-void quick_sort(char** records, int l, int r, int record_len) {
-    
-    if (l < r){
-        int pi = partition(records, l, r, record_len);
-        quick_sort(records, l, pi-1, record_len);
-        quick_sort(records, pi+1, r, record_len);
-    }
-}
+void quick_sort_lib(FILE* fp, int l, int r, int rec_len) {
 
-void sort_records(char** records, int records_no, int record_len) {
-    quick_sort(records, 0, records_no-1, record_len-1);
+    if (l < r){
+        int pi = partition_lib(fp, l, r, rec_len);
+        quick_sort_lib(fp, l, pi-1, rec_len);
+        quick_sort_lib(fp, pi+1, r, rec_len);
+    }
 }
 
 void sort_lib(char* file_name, int records_no, int record_len) {
-    FILE* fp = fopen(file_name, "w+");
+    FILE* fp = fopen(file_name, "r+");
 
-    char** records = calloc(records_no, sizeof(char*));
-
-    for (int i=0;i<records_no;i++) {
-        records[i] = calloc(record_len, sizeof(char));
-        fread(records[i], record_len, record_len, fp);
-        records[i][record_len-1] = 0;
-        //printf("Record %d: %s", i, records[i]);
-    }
-
-    sort_records(records, records_no, record_len);
+    quick_sort_lib(fp, 0, records_no-1, record_len);
 
     fclose(fp);
 }
@@ -212,25 +221,57 @@ void copy_lib(char* file_name1, char* file_name2, int records_no, int record_len
     fclose(fp2);
 }
 
+int partition_sys(int fp, int l, int r, int rec_len){
+    lseek (fp, l*rec_len, SEEK_SET);
+    char* pivot_char = calloc(rec_len, sizeof(char));
+    read(fp, pivot_char, rec_len);
+    char* record_j = calloc(rec_len, sizeof(char));
+    char* record_i = calloc(rec_len, sizeof(char));
+
+    int i=l+1;
+    for (int j=l+1;j<=r;j++) {
+        lseek(fp, j*rec_len, SEEK_SET);
+        read(fp, record_j, rec_len);
+
+        if (isFirstLesser(record_j, pivot_char, rec_len)) {
+            lseek(fp, i*rec_len, SEEK_SET);
+            read(fp, record_i, rec_len);
+            lseek(fp, i*rec_len, SEEK_SET);
+            write(fp, record_j, rec_len);
+            lseek(fp, j*rec_len, SEEK_SET);
+            write(fp, record_i, rec_len);
+            i++;
+        }
+    }
+
+    lseek(fp, (i-1)*rec_len, SEEK_SET);
+    read(fp, record_i, rec_len);
+    lseek(fp, (i-1)*rec_len, SEEK_SET);
+    write(fp, pivot_char, rec_len);
+    lseek(fp, l*rec_len, SEEK_SET);
+    write(fp, record_i, rec_len);
+
+    free(pivot_char);
+    free(record_j);
+    free(record_i);
+    
+    return i-1;
+}
+
+void quick_sort_sys(int fp, int l, int r, int rec_len) {
+
+    if (l < r){
+        int pi = partition_sys(fp, l, r, rec_len);
+        quick_sort_sys(fp, l, pi-1, rec_len);
+        quick_sort_sys(fp, pi+1, r, rec_len);
+    }
+}
+
+
 void sort_sys(char* file_name, int records_no, int record_len) {
     int fp = open(file_name, O_RDWR);
 
-    char** records = calloc(records_no, sizeof(char*));
-
-    for (int i=0;i<records_no;i++) {
-        records[i] = calloc(record_len, sizeof(char));
-        read(fp, records[i], record_len);
-        records[i][record_len-1] = 0;
-    }
-    
-    sort_records(records, records_no, record_len);
-    
-    lseek(fp, 0, SEEK_SET);
-    
-    for (int i=0;i<records_no;i++) {
-        records[i][record_len-1] = '\n';
-        write(fp, records[i], record_len);
-    } 
+    quick_sort_sys(fp, 0, records_no-1, record_len);
 
     close(fp);
 }

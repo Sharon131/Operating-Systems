@@ -1,6 +1,7 @@
 *.o
 *.txt
 !raport*.txt
+!wyniki.txt
 *.a
 *.so
 *.tar.gz

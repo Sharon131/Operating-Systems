@@ -1,0 +1,190 @@
+Przyglądając się poniższym wynikom można zauważyć, że szybkość
+funkcji bibliotecznych i systemowych zależy głównie od wykonywanych
+operacji. Dla kopiowania plików funkcje biblioteczne są szybsze,
+im większa liczba bloków i ich rozmiar, tym większe różnice czasów
+działania się pojawiają. Natomiast w przypadku sortowania plików
+sytuacja jest odwrotna: program używający funkcji systemowych jest
+kilkakrotnie szybszy od wykorzystujące funkcje biblioteczne do 
+operacji na plikach. Jednakże różnice zaczynają być wyraźnie
+widoczne dla bloków o długości większej niż jeden - dla równych
+jeden czasy są mocno zbliżone. 
+--------------------------------
+Copy file with record size = 1
+Times taken for command copy for files testa.txt test1a_sys.txt with args 1000000 1 in mode sys
+User time: 0.200000 s
+System time: 4.250000 s
+Times taken for command copy for files testa.txt test1a_lib.txt with args 1000000 1 in mode lib
+
+User time: 0.150000 s
+System time: 0.000000 s
+Times taken for command copy for files testa.txt test1b_sys.txt with args 10000000 1 in mode sys
+User time: 0.200000 s
+System time: 4.270000 s
+Times taken for command copy for files testa.txt test1b_lib.txt with args 10000000 1 in mode lib
+
+User time: 0.090000 s
+System time: 0.000000 s
+--------------------------------
+Copy file with record size = 4
+Times taken for command copy for files testa.txt test4a_sys.txt with args 100000 4 in mode sys
+User time: 0.070000 s
+System time: 1.000000 s
+Times taken for command copy for files testa.txt test4a_lib.txt with args 100000 4 in mode lib
+
+User time: 0.040000 s
+System time: 0.000000 s
+Times taken for command copy for files testa.txt test4b_sys.txt with args 1000000 4 in mode sys
+User time: 0.090000 s
+System time: 1.070000 s
+Times taken for command copy for files testa.txt test4b_lib.txt with args 1000000 4 in mode lib
+
+User time: 0.040000 s
+System time: 0.000000 s
+--------------------------------
+Copy file with record size = 512
+Times taken for command copy for files testa.txt test512a_sys.txt with args 10000 512 in mode sys
+User time: 0.540000 s
+System time: 10.810000 s
+Times taken for command copy for files testa.txt test512a_lib.txt with args 10000 512 in mode lib
+
+User time: 0.250000 s
+System time: 0.000000 s
+Times taken for command copy for files testa.txt test512b_sys.txt with args 100000 512 in mode sys
+User time: 0.690000 s
+System time: 10.820000 s
+Times taken for command copy for files testa.txt test512b_lib.txt with args 100000 512 in mode lib
+
+User time: 0.230000 s
+System time: 0.010000 s
+--------------------------------
+Copy file with record size = 1024
+Times taken for command copy for files testa.txt test1024a_sys.txt with args 10000 1024 in mode sys
+User time: 1.190000 s
+System time: 21.110000 s
+Times taken for command copy for files testa.txt test1024a_lib.txt with args 10000 1024 in mode lib
+
+User time: 0.480000 s
+System time: 0.000000 s
+Times taken for command copy for files testa.txt test1024b_sys.txt with args 100000 1024 in mode sys
+User time: 1.260000 s
+System time: 21.200000 s
+Times taken for command copy for files testa.txt test1024b_lib.txt with args 100000 1024 in mode lib
+
+User time: 0.500000 s
+System time: 0.000000 s
+--------------------------------
+Copy file with record size = 4096
+Times taken for command copy for files testa.txt test4096a_sys.txt with args 10000 4096 in mode sys
+User time: 5.020000 s
+System time: 86.060000 s
+Times taken for command copy for files testa.txt test4096a_lib.txt with args 10000 4096 in mode lib
+
+User time: 1.990000 s
+System time: 0.070000 s
+Times taken for command copy for files testa.txt test4096b_sys.txt with args 20000 4096 in mode sys
+User time: 5.140000 s
+System time: 85.440000 s
+Times taken for command copy for files testa.txt test4096b_lib.txt with args 20000 4096 in mode lib
+
+User time: 1.960000 s
+System time: 0.050000 s
+--------------------------------
+Copy file with record size = 8192
+Times taken for command copy for files testa.txt test8192a_sys.txt with args 10000 8192 in mode sys
+User time: 10.260000 s
+System time: 170.730000 s
+Times taken for command copy for files testa.txt test8192a_lib.txt with args 10000 8192 in mode lib
+
+User time: 3.930000 s
+System time: 0.110000 s
+Times taken for command copy for files testa.txt test8192b_sys.txt with args 20000 8192 in mode sys
+User time: 10.020000 s
+System time: 169.920000 s
+Times taken for command copy for files testa.txt test8192b_lib.txt with args 20000 8192 in mode lib
+
+User time: 3.830000 s
+System time: 0.080000 s
+--------------------------------
+Sort file with record size = 1
+Times taken for command sort for file test1a2_sys.txt with args 10000 1 in mode sys
+User time: 0.110000 s
+System time: 0.450000 s
+Times taken for command sort for file test1a2_lib.txt with args 10000 1 in mode lib
+User time: 0.130000 s
+System time: 0.260000 s
+Times taken for command sort for file test1b2_sys.txt with args 100000 1 in mode sys
+User time: 5.910000 s
+System time: 25.760000 s
+Times taken for command sort for file test1b2_lib.txt with args 100000 1 in mode lib
+User time: 6.710000 s
+System time: 6.860000 s
+--------------------------------
+Sort file with record size = 4
+Times taken for command sort for file test4a2_sys.txt with args 10000 4 in mode sys
+User time: 0.030000 s
+System time: 0.370000 s
+Times taken for command sort for file test4a2_lib.txt with args 10000 4 in mode lib
+User time: 0.090000 s
+System time: 0.400000 s
+Times taken for command sort for file test4b2_sys.txt with args 100000 4 in mode sys
+User time: 0.540000 s
+System time: 4.500000 s
+Times taken for command sort for file test4b2_lib.txt with args 100000 4 in mode lib
+User time: 1.180000 s
+System time: 4.730000 s
+--------------------------------
+Sort file with record size = 512
+Times taken for command sort for file test512a2_sys.txt with args 10000 512 in mode sys
+User time: 0.060000 s
+System time: 0.400000 s
+Times taken for command sort for file test512a2_lib.txt with args 10000 512 in mode lib
+User time: 0.120000 s
+System time: 0.460000 s
+Times taken for command sort for file test512b2_sys.txt with args 100000 512 in mode sys
+User time: 0.510000 s
+System time: 4.910000 s
+Times taken for command sort for file test512b2_lib.txt with args 100000 512 in mode lib
+User time: 1.500000 s
+System time: 5.790000 s
+--------------------------------
+Sort file with record size = 1024
+Times taken for command sort for file test1024a2_sys.txt with args 10000 1024 in mode sys
+User time: 0.010000 s
+System time: 0.450000 s
+Times taken for command sort for file test1024a2_lib.txt with args 10000 1024 in mode lib
+User time: 0.100000 s
+System time: 0.520000 s
+Times taken for command sort for file test1024b2_sys.txt with args 100000 1024 in mode sys
+User time: 0.540000 s
+System time: 5.180000 s
+Times taken for command sort for file test1024b2_lib.txt with args 100000 1024 in mode lib
+User time: 1.620000 s
+System time: 6.470000 s
+--------------------------------
+Sort file with record size = 4096
+Times taken for command sort for file test4096a2_sys.txt with args 10000 4096 in mode sys
+User time: 0.070000 s
+System time: 0.570000 s
+Times taken for command sort for file test4096a2_lib.txt with args 10000 4096 in mode lib
+User time: 0.190000 s
+System time: 0.970000 s
+Times taken for command sort for file test4096b2_sys.txt with args 100000 4096 in mode sys
+User time: 0.510000 s
+System time: 7.430000 s
+Times taken for command sort for file test4096b2_lib.txt with args 100000 4096 in mode lib
+User time: 2.220000 s
+System time: 11.990000 s
+--------------------------------
+Sort file with record size = 8192
+Times taken for command sort for file test8192a2_sys.txt with args 10000 8192 in mode sys
+User time: 0.050000 s
+System time: 0.890000 s
+Times taken for command sort for file test8192a2_lib.txt with args 10000 8192 in mode lib
+User time: 0.180000 s
+System time: 1.190000 s
+Times taken for command sort for file test8192b2_sys.txt with args 100000 8192 in mode sys
+User time: 0.640000 s
+System time: 10.280000 s
+Times taken for command sort for file test8192b2_lib.txt with args 100000 8192 in mode lib
+User time: 2.510000 s
+System time: 16.070000 s
