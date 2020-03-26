@@ -11,3 +11,4 @@ main
 test_static
 test_shared
 test_dynamic
+child
