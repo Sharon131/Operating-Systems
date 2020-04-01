@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -15,7 +14,9 @@ int main(int argc, char** argv) {
     int arg_indx = 1;
 
     char* file_name = argv[arg_indx++];
-    int children_no = atoi(argv[arg_indx]);
+    int children_no = atoi(argv[arg_indx++]);
+    int max_time = atoi(argv[arg_indx++]);
+    char* mode = argv[arg_indx];
 
     // Read files names
     char *mfile1 = NULL, *mfile2 = NULL, *exfile = NULL;
@@ -23,9 +24,12 @@ int main(int argc, char** argv) {
 
     FILE* fp = fopen(file_name,"r");
 
-    getline(&mfile1,&mfile1_size, fp);
-    getline(&mfile2,&mfile2_size, fp);
-    getline(&exfile, &exfile_size, fp);
+    int chars_no = getline(&mfile1,&mfile1_size, fp);
+    mfile1[chars_no-1] = 0;
+    chars_no = getline(&mfile2,&mfile2_size, fp);
+    mfile2[chars_no-1] = 0;
+    chars_no = getline(&exfile, &exfile_size, fp);
+    exfile[chars_no-1] = 0;
 
     fclose(fp);
     // Reding file names end
@@ -41,9 +45,11 @@ int main(int argc, char** argv) {
     }
 
     if(children_pids[indx-1]==0) {
-        execlp("./child", mfile1, mfile2, exfile, NULL);
+        execlp("./child", "child", mfile1, mfile2, exfile, mode, NULL);
     } else {
         printf("Program 'main', pid: %d\n", (int)getpid());
+        int stat;
+        wait(&stat);
     }
 
     return 0;
@@ -57,12 +63,11 @@ void check_argc(int argc) {
     } else if (argc == 2) {
         printf("Number of child processes was not given.\n");
         exit(-1);
-    } /* else if (argc == 3) {
+    } else if (argc == 3) {
         printf("Time limit for child process was not given.\n");
         exit(-1);
     } else if (argc == 4) {
-        printf("Craeting result file mode not specified.\n");
+        printf("Creating result file mode not specified.\n");
         exit(-1);
     }
-    */
 }
