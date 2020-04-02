@@ -1,16 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/file.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 void check_argc(int argc);
+void check_argv(char** argv);
 
+void prepare_common_file() {
+    int fp = open("comm.txt", O_RDWR | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXO);
+    close(fp);
+}
 
 int main(int argc, char** argv) {
     check_argc(argc);
-    
+    check_argv(argv);
+
     int arg_indx = 1;
 
     char* file_name = argv[arg_indx++];
@@ -34,6 +43,9 @@ int main(int argc, char** argv) {
     fclose(fp);
     // Reding file names end
     
+    //Preparing common file for children
+    prepare_common_file();
+
     pid_t* children_pids = calloc(children_no, sizeof(pid_t));
 
     int indx = 0;
@@ -44,8 +56,11 @@ int main(int argc, char** argv) {
         indx++;
     }
 
+
     if(children_pids[indx-1]==0) {
-        execlp("./child", "child", mfile1, mfile2, exfile, mode, NULL);
+        char indx_ch[5];
+        snprintf(indx_ch, 4, "%d", indx);
+        execlp("./child", "child", mfile1, mfile2, exfile, indx_ch, mode, NULL);
     } else {
         printf("Program 'main', pid: %d\n", (int)getpid());
         int stat;
@@ -68,6 +83,15 @@ void check_argc(int argc) {
         exit(-1);
     } else if (argc == 4) {
         printf("Creating result file mode not specified.\n");
+        exit(-1);
+    }
+}
+
+void check_argv(char** argv) {
+    char* mode = argv[4];
+
+    if (strcmp(mode, "comm")!=0 && strcmp(mode, "sep")!=0) {
+        printf("Not known mode. Exiting.\n");
         exit(-1);
     }
 }
