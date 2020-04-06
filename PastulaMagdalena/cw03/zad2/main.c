@@ -11,9 +11,13 @@
 void check_argc(int argc);
 void check_argv(char** argv);
 
-void prepare_common_file() {
+void prepare_common_files(char* exfile) {
     int fp = open("comm.txt", O_RDWR | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXO);
     close(fp);
+    //if (strcmp(mode, "comm")==0) {
+    fp = open(exfile, O_RDWR | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXO);
+    close(fp);
+    //}
 }
 
 int main(int argc, char** argv) {
@@ -44,7 +48,7 @@ int main(int argc, char** argv) {
     // Reding file names end
     
     //Preparing common file for children
-    prepare_common_file();
+    prepare_common_files(exfile);
 
     pid_t* children_pids = calloc(children_no, sizeof(pid_t));
 
@@ -64,7 +68,13 @@ int main(int argc, char** argv) {
     } else {
         printf("Program 'main', pid: %d\n", (int)getpid());
         int stat;
-        wait(&stat);
+        indx=0;
+
+        while(indx < children_no) { 
+            wait(&stat);
+            indx++;
+        }
+        
     }
 
     return 0;
