@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
     char* file_name = argv[arg_indx++];
     int children_no = atoi(argv[arg_indx++]);
-    int max_time = atoi(argv[arg_indx++]);
+    char* max_time = argv[arg_indx++];
     char* mode = argv[arg_indx];
 
     // Read files names
@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     if(children_pids[indx-1]==0) {
         char indx_ch[5];
         snprintf(indx_ch, 4, "%d", indx);
-        execlp("./child", "child", mfile1, mfile2, exfile, indx_ch, mode, NULL);
+        execlp("./child", "child", mfile1, mfile2, exfile, indx_ch, max_time, mode, NULL);
     } else {
         printf("Program 'main', pid: %d\n", (int)getpid());
         int stat;
@@ -72,6 +72,8 @@ int main(int argc, char** argv) {
 
         while(indx < children_no) { 
             wait(&stat);
+            //pid_t child_pid = wait(&stat);
+            //printf("Child process with pid %d did %d multiplication(s).\n", child_pid, WEXITSTATUS(stat));
             indx++;
         }
         
