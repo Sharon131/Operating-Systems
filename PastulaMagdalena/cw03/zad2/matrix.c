@@ -127,3 +127,17 @@ struct matrix* get_product_col(struct matrix* m1, struct matrix* m2, int col_no)
 
     return result;
 }
+
+void free_matrix(struct matrix* m) {
+    if (m != NULL) {
+        if (m->vals != NULL) {
+            for (int i=0;i<m->rows_no;i++) {
+                if (m->vals[i] != NULL) {
+                    free(m->vals[i]);
+                }
+            }
+            free(m->vals);
+        }
+        free(m);
+    }
+}

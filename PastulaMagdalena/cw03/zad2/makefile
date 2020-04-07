@@ -1,8 +1,8 @@
 # Makefile
 
-all: clean main child check
+all: clean main child check paste
 
-main: clean child
+main: clean child paste
 	gcc -Wall main.c -o main
 
 child: matrix
@@ -10,6 +10,9 @@ child: matrix
 
 check: matrix
 	gcc -Wall check.c -L. -lmatrix -o check
+
+paste:
+	gcc -Wall paste_sep.c -L. -lmatrix -o paste_sep
 
 matrix:
 	gcc -Wall -c matrix.c -o matrix.o

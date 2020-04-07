@@ -20,4 +20,6 @@ struct matrix* multiply(struct matrix* m1, struct matrix* m2);
 
 struct matrix* get_product_col(struct matrix* m1, struct matrix* m2, int col_no);
 
+void free_matrix(struct matrix* m);
+
 #endif

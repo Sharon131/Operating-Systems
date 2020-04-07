@@ -13,6 +13,9 @@ void generate(int pairs_no, int size_min, int size_max);
 
 void test(char* file1, char* file2, char* exfile) {
     printf("Test to be implemented.\n");
+
+    
+
     return;
 }
 
@@ -28,10 +31,22 @@ int main(int argc, char** argv) {
         int size_max = atoi(argv[4]);
         generate(pairs_no, size_min, size_max);
     } else if (strcmp("test", command) == 0) {
-        char* file1 = argv[2];
-        char* file2 = argv[3];
-        char* exfile = argv[4];
-        test(file1, file2, exfile);
+        char* file_name = argv[2];
+        char *mfile1 = NULL, *mfile2 = NULL, *exfile = NULL;
+        size_t mfile1_size = 0, mfile2_size = 0, exfile_size = 0;
+
+        FILE* fp = fopen(file_name,"r");
+
+        int chars_no = getline(&mfile1,&mfile1_size, fp);
+        mfile1[chars_no-1] = 0;
+        chars_no = getline(&mfile2,&mfile2_size, fp);
+        mfile2[chars_no-1] = 0;
+        chars_no = getline(&exfile, &exfile_size, fp);
+        exfile[chars_no-1] = 0;
+
+        fclose(fp);
+        
+        test(mfile1, mfile2, exfile);
     } else {
         printf("Not known command. Exiting.\n");
         exit(-1);

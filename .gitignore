@@ -13,3 +13,4 @@ test_shared
 test_dynamic
 child
 check
+paste_sep

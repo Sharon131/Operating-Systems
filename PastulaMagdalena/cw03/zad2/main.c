@@ -63,18 +63,32 @@ int main(int argc, char** argv) {
 
     if(children_pids[indx-1]==0) {
         char indx_ch[5];
-        snprintf(indx_ch, 4, "%d", indx);
+        snprintf(indx_ch, 4, "%d", indx-1);
         execlp("./child", "child", mfile1, mfile2, exfile, indx_ch, max_time, mode, NULL);
     } else {
         printf("Program 'main', pid: %d\n", (int)getpid());
-        int stat;
-        indx=0;
+        
+        if (strcmp(mode, "sep")==0) {
+            pid_t paste_pid = fork();
 
-        while(indx < children_no) { 
-            wait(&stat);
-            //pid_t child_pid = wait(&stat);
-            //printf("Child process with pid %d did %d multiplication(s).\n", child_pid, WEXITSTATUS(stat));
-            indx++;
+            if (paste_pid == 0) {
+                char* ch_children_no = argv[2];
+                
+                execlp("./paste_sep", "paste_sep", exfile, ch_children_no, mfile1, mfile2, NULL);
+            } else {
+                int stat;
+                waitpid(paste_pid ,&stat, 0);
+            }
+        } else {
+            int stat;
+            indx=0;
+
+            while(indx < children_no) { 
+                wait(&stat);
+                //pid_t child_pid = wait(&stat);
+                //printf("Child process with pid %d did %d multiplication(s).\n", child_pid, WEXITSTATUS(stat));
+                indx++;
+            }
         }
         
     }
