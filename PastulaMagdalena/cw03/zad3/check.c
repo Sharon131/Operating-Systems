@@ -8,6 +8,7 @@ void check_argc(int argc);
 
 void fill_matrix_with_rand(struct matrix* m);
 void write_matrix_to_file(struct matrix* m, char* file_name);
+void write_to_main_file(char* mfile1, char* mfile2, int indx);
 
 void generate(int pairs_no, int size_min, int size_max);
 void test(char* main_file, char* file1, char* file2, char* exfile);
@@ -80,6 +81,22 @@ void write_matrix_to_file(struct matrix* m, char* file_name) {
     fclose(fp);
 }
 
+void write_to_main_file(char* mfile1, char* mfile2, int indx) {
+    char main_name[20];
+    snprintf(main_name, 20, "test%d.txt", indx);
+
+    char exit_name[20];
+    snprintf(exit_name, 20, "exit%d.txt", indx);
+
+    FILE* fp = fopen(main_name, "w");
+
+    fprintf(fp, "%s\n", mfile1);
+    fprintf(fp, "%s\n", mfile2);
+    fprintf(fp, "%s\n", exit_name);
+
+    fclose(fp);
+}
+
 void generate(int pairs_no, int size_min, int size_max) {
     int size_interval = size_max-size_min;
 
@@ -103,6 +120,8 @@ void generate(int pairs_no, int size_min, int size_max) {
         
         write_matrix_to_file(&m1, A_file);
         write_matrix_to_file(&m2, B_file);
+
+        write_to_main_file(A_file, B_file, i);
     }
 
 }
