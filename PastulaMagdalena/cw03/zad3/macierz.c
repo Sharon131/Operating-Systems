@@ -1,0 +1,3 @@
+#include "macierz.h"
+
+//biblioteka
