@@ -10,14 +10,7 @@ void fill_matrix_with_rand(struct matrix* m);
 void write_matrix_to_file(struct matrix* m, char* file_name);
 
 void generate(int pairs_no, int size_min, int size_max);
-
-void test(char* file1, char* file2, char* exfile) {
-    printf("Test to be implemented.\n");
-
-    
-
-    return;
-}
+void test(char* main_file, char* file1, char* file2, char* exfile);
 
 
 int main(int argc, char** argv) {
@@ -46,7 +39,7 @@ int main(int argc, char** argv) {
 
         fclose(fp);
         
-        test(mfile1, mfile2, exfile);
+        test(file_name, mfile1, mfile2, exfile);
     } else {
         printf("Not known command. Exiting.\n");
         exit(-1);
@@ -56,8 +49,9 @@ int main(int argc, char** argv) {
 }
 
 void check_argc(int argc) {
-    if (argc < 5) {
+    if (argc < 2) {
         printf("Not enough arguments.\n");
+        exit(-1);
     }
 }
 
@@ -111,4 +105,27 @@ void generate(int pairs_no, int size_min, int size_max) {
         write_matrix_to_file(&m2, B_file);
     }
 
+}
+
+void test(char* main_file, char* file1, char* file2, char* exfile) {
+    
+    struct matrix* matrix1 = read_matrix_from(file1);
+    struct matrix* matrix2 = read_matrix_from(file2);
+
+    struct matrix* calculated = read_matrix_from(exfile);
+
+    struct matrix* result = multiply(matrix1, matrix2);
+    
+    if (are_matrices_equal(calculated, result)) {
+        printf("Matrices from file %s were succesfully multiplied.\n", main_file);
+    } else {
+        printf("Something went wrong in multiplication of matrices from file %s\n", main_file);
+    }
+
+    free_matrix(matrix1);
+    free_matrix(matrix2);
+    free_matrix(calculated);
+    free_matrix(result);
+
+    return;
 }

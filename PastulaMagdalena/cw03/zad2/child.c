@@ -18,158 +18,6 @@ void write_result_to_sep(struct matrix* m, char* exfile, int col_no);
 
 void write_result_to_file(struct matrix* m, char* exfile, int col_no, char* mode);
 
-void write_result_to_sep(struct matrix* m, char* exfile, int col_no) {
-    char buff[1];
-    buff[0] = 10;
-
-    while (buff[0] != 0) {
-        int fp = open(exfile, O_RDONLY);
-        flock(fp, LOCK_EX);
-
-        read(fp, buff, 1);
-
-        flock(fp, LOCK_UN);
-        close(fp);
-    }
-    
-    int fp = open(exfile, O_RDWR | O_TRUNC);
-    flock(fp, LOCK_EX);
-
-    //write col_no to file, then
-    //write result to file
-    char to_write[10];
-    snprintf(to_write, 10, "%d\n", col_no);
-    write(fp, to_write, strlen(to_write));
-
-    for (int i=0;i<m->rows_no;i++) {
-        if (i!=m->rows_no-1) {
-            snprintf(to_write, 10, "%d\n", m->vals[i][0]);
-        } else {
-            snprintf(to_write, 10, "%d", m->vals[i][0]);
-        }
-        write(fp, to_write, strlen(to_write));
-    }
-
-    flock(fp, LOCK_UN);
-    close(fp);
-}
-
-// not working
-/*void write_at_line_end(int fp, int to_write) {
-    //int fp = open(exfile, O_RDWR | O_CREAT, S_IRWXU| S_IRWXO);
-
-    char read_char = 0;
-    int code = read(fp, &read_char, 1);
-    int indx = 0;
-
-    printf("Read chars: \n");
-    while (code != 0 &&  read_char != '\n') {
-        printf("%c ", read_char);
-        code = read(fp, &read_char, 1);
-        indx++;
-    }
-    printf("%c ", read_char);
-
-    printf("\nRead chars end \n");
-    printf("Code (no read bytes): %d\n", code);
-    printf("Read char: %d\n", (int)read_char);
-    //while (code >0 && indx <= row_no+1) {
-    //    code = read(fp, &read_char, 1);    
-    //    if (code <= 0  || read_char == '\n') {
-    //        indx++;
-    //    }
-    //}
-
-    //jak nie działa to względem początku pliku, dodać liczenie
-    if (read_char == '\n') {
-        lseek(fp,-1, SEEK_CUR);
-    }
-    
-    int buff_siz = 10;
-    char* buff_ch = calloc(buff_siz, sizeof(char));
-    snprintf(buff_ch, buff_siz, "%d \n", to_write);    
-    
-    write(fp, buff_ch, buff_siz);
-    //lseek(fp, 1, SEEK_CUR);
-
-    //close(fp);
-}
-
-void print_file(char* file_name) {
-    int fp = open(file_name, O_RDWR);
-    char buff[1];
-
-    printf("Printing file:\n");
-    while (read(fp, buff, 1) != 0) {
-        printf("%c", buff[0]);
-    }
-
-    printf("\nEnded printing\n");
-
-    close(fp);
-}
-
-// not needed??
-void write_at_end_of(char* exfile, int to_write, int row_no) {
-    int line_no = row_no+1;
-
-    int fp = open(exfile, O_RDWR | O_CREAT, S_IRWXU| S_IRWXO);
-    lseek(fp, 0, SEEK_SET);
-
-    char read_char[1];
-    int code = read(fp, &read_char, 1);
-    int indx = 0;
-    int read_chars_no = 1;
-
-    if (code != 0) {
-        //printf("EOF\n");
-
-        printf("Writing to file: %d at row: %d\n", to_write, line_no);
-        while (indx <= line_no) {
-            printf("%d ", read_char[0]);
-            code = read(fp, &read_char, 1);
-            
-            if (read_char[0] == '\n') { // || (code == 0 && indx == line_no-1)) {
-                indx++;
-            }
-
-            read_chars_no++;
-        }
-        printf("Last char: %d \n", read_char[0]);
-        printf("Line index: %d\n", indx);
-            
-        //if (code == 0 && indx==line_no-1) {
-        //    lseek(fp,0, SEEK_END);
-        //} else {
-            lseek(fp,read_chars_no-1, SEEK_SET);
-        //}
-        
-    }
-    
-    int buff_siz = 10;
-    char* buff_ch = calloc(buff_siz, sizeof(char));
-    snprintf(buff_ch, buff_siz, "%d \n", to_write);    
-    
-    printf("Written string:\n");
-    int ind = 0;
-    while (buff_ch[ind] != 0) {
-        write(fp, buff_ch+ind, 1);        
-        printf("%d ", buff_ch[ind]);
-        ind++;
-    }
-    printf("\n");
-    
-    //buff_ch[ind] = '\n';
-    //write(fp, buff_ch+ind, 1);  
-
-    //write(fp, buff_ch, buff_siz);
-    //write(fp, "\n", 1);
-
-    print_file(exfile);
-
-    close(fp);
-}*/
-
 
 int main(int argc, char** argv) {
     //setrlimit();
@@ -193,9 +41,6 @@ int main(int argc, char** argv) {
 
     struct matrix* matrix1 = read_matrix_from(mfile1);
     struct matrix* matrix2 = read_matrix_from(mfile2);
-
-    struct matrix* result = multiply(matrix1, matrix2);
-    //print_matrix(result);
 
     //prepare exfile
     if (strcmp(mode, "sep")==0) {
@@ -225,7 +70,6 @@ int main(int argc, char** argv) {
 
     free(matrix1);
     free(matrix2);
-    free(result);
 
     return multiplies_no;
 }
@@ -362,6 +206,43 @@ void write_result_to_common(struct matrix* m, char* exfile, int col_no) {
     }
 
 }
+
+void write_result_to_sep(struct matrix* m, char* exfile, int col_no) {
+    char buff[1];
+    buff[0] = 10;
+
+    while (buff[0] != 0) {
+        int fp = open(exfile, O_RDONLY);
+        flock(fp, LOCK_EX);
+
+        read(fp, buff, 1);
+
+        flock(fp, LOCK_UN);
+        close(fp);
+    }
+    
+    int fp = open(exfile, O_RDWR | O_TRUNC);
+    flock(fp, LOCK_EX);
+
+    //write col_no to file
+    char to_write[10];
+    snprintf(to_write, 10, "%d\n", col_no);
+    write(fp, to_write, strlen(to_write));
+
+    //write result to file
+    for (int i=0;i<m->rows_no;i++) {
+        if (i!=m->rows_no-1) {
+            snprintf(to_write, 10, "%d\n", m->vals[i][0]);
+        } else {
+            snprintf(to_write, 10, "%d", m->vals[i][0]);
+        }
+        write(fp, to_write, strlen(to_write));
+    }
+
+    flock(fp, LOCK_UN);
+    close(fp);
+}
+
 
 void write_result_to_file(struct matrix* m, char* exfile, int col_no, char* mode) {
 
