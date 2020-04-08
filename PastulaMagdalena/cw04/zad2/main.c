@@ -24,7 +24,7 @@ void set_signal_handling(char* sig_hdl, int sig_no) {
         
         struct sigaction act;
         act.sa_handler = handle_signal;
-        sigemptyset(&act.sa_mask);
+        sigfillset(&act.sa_mask);
         sigaction(sig_no, &act, NULL);
     
     } else if(strcmp(sig_hdl, "mask")==0 || strcmp(sig_hdl, "pending")==0) {
@@ -82,49 +82,66 @@ int main(int argc, char** argv) {
 
     char* mode = argv[1];
     char* signal_handler = argv[2];
-    int sig_no = SIGUSR1;
 
-    set_signal_handling(signal_handler, sig_no);
-
-    if (raise(sig_no) != 0) {
-        printf("Problem in raising signal in main. Exiting.\n");
-        exit(-1);
+    for (int i=1;i<21;i++) {
+        if (i!=9 && i!=19) {
+            set_signal_handling(signal_handler, i);
+        }
     }
-
+    
     printf("Parent testing:\n");
-    bool checked = check_signal_handling(signal_handler, sig_no);
+    bool checked;
 
-    if (checked) {
-        printf("Handling: %s signal: %d - worked in parent process.\n", signal_handler, sig_no);
-    } else {
-        printf("Handling: %s signal: %d - did not work in parent process.\n", signal_handler, sig_no);    
+    for(int i=1;i<21;i++) {
+        if (i!=9 && i!=19) {
+            if (raise(i) != 0) {
+                printf("Problem in raising signal %d in main. Exiting.\n", i);
+                exit(-1);
+            }
+
+            checked = check_signal_handling(signal_handler, i);
+
+            if (checked) {
+                printf("Handling: %s signal: %d - worked in parent process.\n", signal_handler, i);
+            } else {
+                printf("Handling: %s signal: %d - did not work in parent process.\n", signal_handler, i);    
+            }
+        }
     }
+    
 
     if (strcmp(mode, "fork")==0) {
         pid_t child_pid = fork();
 
         if (child_pid == 0) {
-            if (strcmp(signal_handler, "pending") != 0) {
-                raise(sig_no);
-            }
-
-            checked = check_signal_handling(signal_handler, sig_no);
-
             printf("Fork testing:\n");
-            if (checked) {
-                printf("Handling: %s signal: %d - worked in fork.\n", signal_handler, sig_no);
-            } else {
-                printf("Handling: %s signal: %d - did not work in fork.\n", signal_handler, sig_no);    
+            
+            for (int i=1;i<21;i++) {
+                if (i!=9 && i!=19) {
+                    if (strcmp(signal_handler, "pending") != 0) {
+                        raise(i);
+                    }
+
+                    sleep(1);
+                    
+                    checked = check_signal_handling(signal_handler, i);
+
+                    if (checked) {
+                        printf("Handling: %s signal: %d - worked in fork.\n", signal_handler, i);
+                    } else {
+                        printf("Handling: %s signal: %d - did not work in fork.\n", signal_handler, i);    
+                    }
+                }
+
             }
+            
         } else {
             int stat;
             wait(&stat);
         }
 
     } else {
-        char sig_ch[10];
-        snprintf(sig_ch, 10, "%d", sig_no);
-        execlp("./exec", "exec", signal_handler, sig_ch, NULL);
+        execlp("./exec", "exec", signal_handler, NULL);
     }
 
     return 0;
@@ -161,5 +178,5 @@ void check_argv(char** argv) {
 
 void handle_signal(int sig_no) {
     signal_handled = true;
-    printf("\nReceived signal no: %d.\n", sig_no);
+    printf("Received signal no: %d.\n", sig_no);
 }

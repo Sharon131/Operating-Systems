@@ -1,0 +1,13 @@
+Raport:
+Podczas testowanie opcji ignore, handler oraz mask przy forkowaniu
+proces potomny dziedziczył ustawienia procesu nadrzędnego.
+Jedynie w przypadku opcji pending proces potomny nie posiadał
+skopiowanych odpowiednich danych od procesu nadrzędnego, 
+czyli sygnałów oczekujących na odebranie.
+Natomiast w przypadku testowania wywołania exec w przypadku
+wszystkich opcji ustawienia sygnałóq były kopiowane - pomijając 
+opcję handler, która nie była testowana w tym kontekście.
+Wyjątkiem w tej sytuacji była opcja pending dla sygnału o numerze
+18: program wywołany komendą exec nie posiadał sygnału oczekującego
+o tym numerze. Jednakże powodem mogą być czynniki zewnętrzne lub
+kwestia testowania wszystkich sygnałów w jednym programie.
