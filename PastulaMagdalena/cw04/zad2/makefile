@@ -9,4 +9,4 @@ execfile:
 	gcc -Wall exec.c -o exec
 
 clear:
-	rm -f main *.o
+	rm -f main exec

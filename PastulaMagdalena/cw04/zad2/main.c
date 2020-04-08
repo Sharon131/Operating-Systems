@@ -14,65 +14,7 @@ void check_argv(char** argv);
 void handle_signal(int sig_no);
 
 void set_signal_handling(char* sig_hdl, int sig_no);
-
-
-void set_signal_handling(char* sig_hdl, int sig_no) {
-
-    if (strcmp(sig_hdl, "ignore")==0) {
-        signal(sig_no, SIG_IGN);
-    } else if (strcmp(sig_hdl, "handler")==0){
-        
-        struct sigaction act;
-        act.sa_handler = handle_signal;
-        sigfillset(&act.sa_mask);
-        sigaction(sig_no, &act, NULL);
-    
-    } else if(strcmp(sig_hdl, "mask")==0 || strcmp(sig_hdl, "pending")==0) {
-        sigset_t set;
-        sigemptyset(&set);
-        sigaddset(&set, sig_no);
-        sigprocmask(SIG_BLOCK, &set, NULL);
-    }
-}
-
-bool check_signal_handling(char* sig_hdl, int sig_no) {
-    sigset_t set;
-    sigemptyset(&set);
-
-    if (strcmp(sig_hdl, "ignore")==0) {
-        
-        sigpending(&set);
-
-        if (sigismember(&set, sig_no) != 1 && !signal_handled) {
-            return true;
-        }
-    } else if (strcmp(sig_hdl, "handler")==0){
-        if (signal_handled) {
-            signal_handled = false;
-            return true;
-        }
-    } else if(strcmp(sig_hdl, "mask")==0) {
-        
-        sigprocmask(SIG_SETMASK, NULL, &set);
-
-        if (sigismember(&set, sig_no) == 1) {
-            sigprocmask(SIG_SETMASK, &set, NULL);
-            return true;
-        }
-
-        sigprocmask(SIG_SETMASK, &set, NULL);
-
-    } else if (strcmp(sig_hdl, "pending")==0) {
-        
-        sigpending(&set);
-
-        if (sigismember(&set, sig_no) == 1) {
-            return true;
-        }
-    }
-
-    return false;
-}
+bool check_signal_handling(char* sig_hdl, int sig_no);
 
 
 int main(int argc, char** argv) {
@@ -179,4 +121,62 @@ void check_argv(char** argv) {
 void handle_signal(int sig_no) {
     signal_handled = true;
     printf("Received signal no: %d.\n", sig_no);
+}
+
+void set_signal_handling(char* sig_hdl, int sig_no) {
+
+    if (strcmp(sig_hdl, "ignore")==0) {
+        signal(sig_no, SIG_IGN);
+    } else if (strcmp(sig_hdl, "handler")==0){
+        
+        struct sigaction act;
+        act.sa_handler = handle_signal;
+        sigfillset(&act.sa_mask);
+        sigaction(sig_no, &act, NULL);
+    
+    } else if(strcmp(sig_hdl, "mask")==0 || strcmp(sig_hdl, "pending")==0) {
+        sigset_t set;
+        sigemptyset(&set);
+        sigaddset(&set, sig_no);
+        sigprocmask(SIG_BLOCK, &set, NULL);
+    }
+}
+
+bool check_signal_handling(char* sig_hdl, int sig_no) {
+    sigset_t set;
+    sigemptyset(&set);
+
+    if (strcmp(sig_hdl, "ignore")==0) {
+        
+        sigpending(&set);
+
+        if (sigismember(&set, sig_no) != 1 && !signal_handled) {
+            return true;
+        }
+    } else if (strcmp(sig_hdl, "handler")==0){
+        if (signal_handled) {
+            signal_handled = false;
+            return true;
+        }
+    } else if(strcmp(sig_hdl, "mask")==0) {
+        
+        sigprocmask(SIG_SETMASK, NULL, &set);
+
+        if (sigismember(&set, sig_no) == 1) {
+            sigprocmask(SIG_SETMASK, &set, NULL);
+            return true;
+        }
+
+        sigprocmask(SIG_SETMASK, &set, NULL);
+
+    } else if (strcmp(sig_hdl, "pending")==0) {
+        
+        sigpending(&set);
+
+        if (sigismember(&set, sig_no) == 1) {
+            return true;
+        }
+    }
+
+    return false;
 }
