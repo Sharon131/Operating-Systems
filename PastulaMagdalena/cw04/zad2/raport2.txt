@@ -9,5 +9,6 @@ wszystkich opcji ustawienia sygnałóq były kopiowane - pomijając
 opcję handler, która nie była testowana w tym kontekście.
 Wyjątkiem w tej sytuacji była opcja pending dla sygnału o numerze
 18: program wywołany komendą exec nie posiadał sygnału oczekującego
-o tym numerze. Jednakże powodem mogą być czynniki zewnętrzne lub
-kwestia testowania wszystkich sygnałów w jednym programie.
+o tym numerze. Prawdopodonie jest to kwestia faktu, że jest to
+sygnał, któ©y kontynuuje działanie wstrzymanego procesu,
+a podczas testowania nie był on wstrzymany.

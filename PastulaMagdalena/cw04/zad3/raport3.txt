@@ -1,0 +1,21 @@
+Wyświetlone wartości struktury siginfo_t dla sygnału SIGUSR1:
+Errno val: 0
+Signal code val: -6
+Real UID of sending process: 1000.
+User time taken: 0
+System time taken: 0
+File descriptor: 0.
+--------------------------------------------------------------
+Wyświetlone wartości struktury siginfo_t dla sygnału SIGINT:
+Errno val: 0
+Signal code val: -6
+Real UID of sending process: 1000.
+User time taken: 0
+System time taken: 0
+File descriptor: 0.
+--------------------------------------------------------------
+Struktura siginfo_t zawiera takie informacje jak: wartość zmiennej
+errno, uid właściciela programu wysyłąjącego sygnał, zużyty czas
+użytkownika i systemowy, a także deskryptor pliku, ustawiony na 
+plik standardowego wejścia ( w przypadku otworzenia innego pliku
+przed wywołaniem sygnału wartość ta się nie zmienia).
