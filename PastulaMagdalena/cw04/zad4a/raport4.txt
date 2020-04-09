@@ -1,0 +1,16 @@
+-----------------------------------------
+Wysyłanie za pomocą kill:
+Catcher nie odbiera wszystkich sygnałów (z 10 odebrał tylko dwa),
+natomiast sender ponownie odbiera tylko część sygnałów od catchera 
+(z 2 dwóch odebrał tylko jeden).
+--------------------------------
+Wysyłanie za pomocą sigqueue:
+Skuteczność odbierania sygnałów przez catchera oraz przez sendera 
+od catchera jest praktycznie taka sama, jak w przypadku wysyłania 
+zwykłego sygnału poprzez kill. Jedynym atutem jest możliwość
+odczytania przez sender, ile catcher odebrał sygnałów przy odbieraniu
+sygnału SIGUSR2.
+-----------------------------
+Wysyłanie za pomocą kill sygnału czasu rzeczywistego:
+W tym przypadku catcher odebrał taką samą liczbę sygnałów, co wysłał
+sender. Również sender otrzymał od catchera taką samą liczbę sygnałów.
