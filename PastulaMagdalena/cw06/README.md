@@ -1,4 +1,5 @@
-## Zadanie 1. Prosty chat - System V
+# IPC - kolejki komunikatów
+## Zadanie 1. Prosty chat - System V.
 
 Napisz prosty program typu klient-serwer, w którym komunikacja zrealizowana jest za pomocą kolejek komunikatów.
 
@@ -31,7 +32,7 @@ Serwer może wysłać do klientów komunikaty:
 
 Należy obsłużyć przerwanie działania serwera lub klienta za pomocą CTRL+C. Po stronie klienta obsługa tego sygnału jest równoważna z wysłaniem komunikatu STOP.
 
-## Zadanie 2. Prosty chat - POSIX
+## Zadanie 2. Prosty chat - POSIX.
 
 Zrealizuj zadanie analogiczne do Zadania 1, wykorzystując kolejki komunikatów POSIX. Kolejka klienta powinna mieć losową nazwę zgodną z wymaganiami stawianymi przez POSIX. Na typ komunikatu można zarezerwować pierwszy bajt jego treści. Obsługa zamykania kolejek analogiczna jak w zadaniu 1, z tym, że aby można było usunąć kolejkę, wszystkie procesy powinny najpierw ją zamknąć. Przed zakończeniem pracy klient wysyła do serwera komunikat informujący, że serwer powinien zamknąć po swojej stronie kolejkę klienta. Następnie klient zamyka i usuwa swoją kolejkę. Serwer przed zakończeniem pracy zamyka wszystkie otwarte kolejki, informuje klientów, aby usunęli swoje kolejki oraz zamknęli kolejkę serwera i usuwa kolejkę, którą utworzył.
 
