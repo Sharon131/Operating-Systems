@@ -39,11 +39,11 @@ Wynik wykonania *diff a.txt b.txt*:
 2,3c3
 < bbb ccc
 < ddd
----
+- - -
 > fff ccc
 5c5
 < hhh iii 
----
+- - -
 > bbb ggg
 
 W tym przypadku tablica główna powinna zawierać tylko jeden wskaźnik na  blok operacji edycyjnych (bo mamy tylko jedną parę plików). Blok operacji edycyjnych powinien być trzyelementową tablicą wskaźników na napisy z treścią operacji edycyjnych.
