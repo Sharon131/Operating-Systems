@@ -88,4 +88,4 @@ Wyniki pomiarów dodaj do pliku results3b.txt. Otrzymane wyniki krótko skomentu
 
 Wygenerowane pliki z raportami załącz jako element rozwiązania.
 
-**Uwaga**: Do odczytania pliku można użyć funkcji read() (man read), do wywołania zewnętrznego polecenia Unixa można użyć funkcji system() (man system).
+**Uwaga**: Do odczytania pliku można użyć funkcji read() (`man read`), do wywołania zewnętrznego polecenia Unixa można użyć funkcji system() (man system).
