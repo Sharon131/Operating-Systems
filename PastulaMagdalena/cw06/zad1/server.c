@@ -9,54 +9,32 @@ static key_t this_key = 0;
 static int queue_id = 0;
 
 static int clients_no = 0;
-//static struct client_info* info = NULL; //correct to static array? and check
-
 static struct client_info* clients_info[MAX_CLIENTS_NO];
+
+static struct msgbuff to_send;
+static struct msgbuff* response;
 
 void register_sigint_handler ();
 void handle_sigint(int sig_num);
 
 void at_exit(void);
-
 void create_IPCqueue();
 
+void handle_message(struct msgbuff* message);
 
 void init_client(struct msgbuff* msg);
 void list_clients(struct msgbuff* msg);
-
+void connect_clients(struct msgbuff* msg);
+void disconnect_client(struct msgbuff* msg);
 void stop_client(struct msgbuff* msg);
-
-
-void connect_clients(struct msgbuff* msg) {
-    ;
-}
-
-void diconnect_client(struct msgbuff* msg) {
-    clients_info[msg->client_id]->is_chatting = false;
-}
-
-
-void handle_message(struct msgbuff* message) {
-    if (message->mtype == INIT) {
-        init_client(message);
-    } else if(message->mtype == LIST) {
-        list_clients(message);
-    } else if (message->mtype == CONNECT) {
-        ;
-    } else if (message->mtype == DISCONNECT) {
-        ;
-    } else if(message->mtype == STOP) {
-        stop_client(message);
-    } else {
-        printf("Command type %ld not known.\n", message->mtype);
-    }
-}
 
 
 /*-------------------------------------------------------------*/
 
 
 int main(int argc, char** argv) {
+    
+    response = calloc(1, sizeof(struct msgbuff));
     
     atexit(at_exit);
     register_sigint_handler();
@@ -67,16 +45,11 @@ int main(int argc, char** argv) {
     printf("Queue id: %d\n", queue_id);
 
 
-    
     while (!sigint_received) {
-        struct msgbuff* message = calloc(1, sizeof(struct msgbuff));
-        if (msgrcv(queue_id, message, SIZEOF_BUFF, -1*MAX_MSG_NUM, IPC_NOWAIT | IPC_FLAGS) != -1) {
-            handle_message(message);    
+        if (msgrcv(queue_id, response, SIZEOF_BUFF, -1*MAX_MSG_TYPE, IPC_NOWAIT | IPC_FLAGS) != -1) {
+            handle_message(response);    
         }
-        free(message);
     }
-
-    printf("\nShutting down the server.\n");
 
     return 0;
 }
@@ -102,17 +75,21 @@ void handle_sigint(int sig_num) {
 }
 
 void at_exit(void) {
-    struct msgbuff msg;
-    msg.mtype = STOP;
+    
+    printf("\nShutting down the server.\n");
+
+    to_send.mtype = STOP;
+    to_send.sender_key = this_key;
         
-    for (int i=0; i<clients_no;i++) {
+    for (int i=0; i<MAX_CLIENTS_NO;i++) {
         if (clients_info[i] != NULL) {
-            msgsnd(clients_info[i]->queue_id, &msg, 0, IPC_FLAGS);
+            msgsnd(clients_info[i]->queue_id, &to_send, SIZEOF_BUFF, IPC_FLAGS);
             free(clients_info[i]);
         }
     }
 
     msgctl(queue_id, IPC_RMID, NULL);
+    free(response);
 }
 
 void create_IPCqueue() {
@@ -125,6 +102,21 @@ void create_IPCqueue() {
     }
 }
 
+void handle_message(struct msgbuff* message) {
+    if (message->mtype == INIT) {
+        init_client(message);
+    } else if(message->mtype == LIST) {
+        list_clients(message);
+    } else if (message->mtype == CONNECT) {
+        connect_clients(message);
+    } else if (message->mtype == DISCONNECT) {
+        disconnect_client(message);
+    } else if(message->mtype == STOP) {
+        stop_client(message);
+    } else {
+        printf("Command type %ld not known.\n", message->mtype);
+    }
+}
 
 void init_client(struct msgbuff* msg) {
     
@@ -154,19 +146,19 @@ void init_client(struct msgbuff* msg) {
     
     clients_info[i] = client;
 
-    struct msgbuff message;
-    message.mtype = INIT;
-    message.sender_key = this_key;
-    message.client_id = i;
+    to_send.mtype = INIT;
+    to_send.sender_key = this_key;
+    to_send.client_id = i;
     
-    msgsnd(client_queue_id, &message, SIZEOF_BUFF, IPC_FLAGS);
+    msgsnd(client_queue_id, &to_send, SIZEOF_BUFF, IPC_FLAGS);
 
     clients_no++;
+
+    printf("Initialized user with id: %d\n", clients_no-1);
 }
 
 
 void list_clients(struct msgbuff* msg) {
-    struct msgbuff to_send;
     to_send.mtype = LIST;
     to_send.sender_key = this_key;
     
@@ -194,5 +186,35 @@ void stop_client(struct msgbuff* msg) {
     free(clients_info[msg->client_id]);
     clients_info[msg->client_id] = NULL;
 
-    printf("Deleted client with id: %d from server.\n", msg->client_id   );
+    printf("Deleted client with id: %d from server.\n", msg->client_id);
+}
+
+void connect_clients(struct msgbuff* msg) {
+    
+    to_send.mtype = CONNECT;
+    to_send.sender_key = this_key;
+    to_send.connect_to = msg->connect_to;
+    to_send.queue_id_to_connect = clients_info[msg->connect_to]->queue_id;
+
+    //send info to both clients
+    msgsnd(clients_info[msg->client_id]->queue_id, &to_send, SIZEOF_BUFF, IPC_FLAGS);
+
+    to_send.connect_to = msg->client_id;
+    to_send.queue_id_to_connect = clients_info[msg->client_id]->queue_id;
+
+    msgsnd(clients_info[msg->connect_to]->queue_id, &to_send, SIZEOF_BUFF, IPC_FLAGS);
+
+    clients_info[msg->client_id]->is_chatting = true;
+    clients_info[msg->connect_to]->is_chatting = true;
+}
+
+void disconnect_client(struct msgbuff* msg) {
+    clients_info[msg->client_id]->is_chatting = false;
+
+    to_send.mtype = DISCONNECT;
+    to_send.sender_key = this_key;
+    
+    msgsnd(clients_info[msg->connect_to]->queue_id, &to_send, SIZEOF_BUFF, IPC_FLAGS);
+
+    clients_info[msg->connect_to]->is_chatting = false;
 }
