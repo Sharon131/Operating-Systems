@@ -15,4 +15,4 @@ sender:
 	gcc -Wall sender.c -o sender
 
 clear:
-	rm -f main
+	rm -f main receiver packer sender
