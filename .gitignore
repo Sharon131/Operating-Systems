@@ -2,6 +2,7 @@
 *.txt
 !raport*.txt
 !wyniki.txt
+!times.txt
 *.a
 *.so
 *.tar.gz

@@ -1,0 +1,81 @@
+-----------------------------------------------
+Times for sign mode with 1 thread(s).
+Time taken for thread 0: 0 s 1 ms 79 us.
+General time taken: 0 s 1 ms 201 us
+-----------------------------------------------
+Times for block mode with 1 thread(s).
+Time taken for thread 0: 0 s 0 ms 716 us.
+General time taken: 0 s 0 ms 900 us
+-----------------------------------------------
+Times for interleaved mode with 1 thread(s).
+Time taken for thread 0: 0 s 0 ms 754 us.
+General time taken: 0 s 0 ms 925 us
+-----------------------------------------------
+Times for sign mode with 2 thread(s).
+Time taken for thread 0: 0 s 1 ms 101 us.
+Time taken for thread 1: 0 s 0 ms 989 us.
+General time taken: 0 s 1 ms 267 us
+-----------------------------------------------
+Times for block mode with 2 thread(s).
+Time taken for thread 0: 0 s 0 ms 360 us.
+Time taken for thread 1: 0 s 0 ms 335 us.
+General time taken: 0 s 0 ms 511 us
+-----------------------------------------------
+Times for interleaved mode with 2 thread(s).
+Time taken for thread 0: 0 s 0 ms 520 us.
+Time taken for thread 1: 0 s 0 ms 386 us.
+General time taken: 0 s 0 ms 617 us
+-----------------------------------------------
+Times for sign mode with 4 thread(s).
+Time taken for thread 0: 0 s 1 ms 304 us.
+Time taken for thread 1: 0 s 1 ms 50 us.
+Time taken for thread 2: 0 s 1 ms 419 us.
+Time taken for thread 3: 0 s 0 ms 942 us.
+General time taken: 0 s 1 ms 573 us
+-----------------------------------------------
+Times for block mode with 4 thread(s).
+Time taken for thread 0: 0 s 0 ms 236 us.
+Time taken for thread 1: 0 s 0 ms 279 us.
+Time taken for thread 2: 0 s 0 ms 262 us.
+Time taken for thread 3: 0 s 0 ms 287 us.
+General time taken: 0 s 0 ms 440 us
+-----------------------------------------------
+Times for interleaved mode with 4 thread(s).
+Time taken for thread 0: 0 s 0 ms 223 us.
+Time taken for thread 1: 0 s 0 ms 199 us.
+Time taken for thread 2: 0 s 0 ms 358 us.
+Time taken for thread 3: 0 s 0 ms 340 us.
+General time taken: 0 s 0 ms 529 us
+-----------------------------------------------
+Times for sign mode with 8 thread(s).
+Time taken for thread 0: 0 s 1 ms 240 us.
+Time taken for thread 1: 0 s 1 ms 469 us.
+Time taken for thread 2: 0 s 1 ms 539 us.
+Time taken for thread 3: 0 s 1 ms 540 us.
+Time taken for thread 4: 0 s 1 ms 497 us.
+Time taken for thread 5: 0 s 1 ms 153 us.
+Time taken for thread 6: 0 s 0 ms 806 us.
+Time taken for thread 7: 0 s 0 ms 635 us.
+General time taken: 0 s 2 ms 844 us
+-----------------------------------------------
+Times for block mode with 8 thread(s).
+Time taken for thread 0: 0 s 0 ms 165 us.
+Time taken for thread 1: 0 s 0 ms 164 us.
+Time taken for thread 2: 0 s 0 ms 152 us.
+Time taken for thread 3: 0 s 0 ms 152 us.
+Time taken for thread 4: 0 s 0 ms 162 us.
+Time taken for thread 5: 0 s 0 ms 145 us.
+Time taken for thread 6: 0 s 0 ms 148 us.
+Time taken for thread 7: 0 s 0 ms 242 us.
+General time taken: 0 s 0 ms 539 us
+-----------------------------------------------
+Times for interleaved mode with 8 thread(s).
+Time taken for thread 0: 0 s 0 ms 89 us.
+Time taken for thread 1: 0 s 0 ms 176 us.
+Time taken for thread 2: 0 s 0 ms 230 us.
+Time taken for thread 3: 0 s 0 ms 181 us.
+Time taken for thread 4: 0 s 0 ms 159 us.
+Time taken for thread 5: 0 s 0 ms 133 us.
+Time taken for thread 6: 0 s 0 ms 110 us.
+Time taken for thread 7: 0 s 0 ms 128 us.
+General time taken: 0 s 0 ms 514 us
