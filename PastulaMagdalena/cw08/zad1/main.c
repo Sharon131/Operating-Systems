@@ -36,68 +36,13 @@ void* sign_thread_func(void* args);
 void* block_thread_func(void* args);
 void* interleaved_thread_func(void* args);
 
-void subtract_times(struct timespec* x, struct timespec* y, struct timespec* res);
 void save_result_to(char* file_name, int threads_no);
+void save_times_to_file(struct timespec* start_time, char* mode);
 
-void save_times_to_file(struct timespec* start_time, char* mode) {
+void subtract_times(struct timespec* x, struct timespec* y, struct timespec* res);
 
-    int fd = open("times.txt", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
-    char buff[100];
-    
-    snprintf(buff, 99, "-----------------------------------------------\n");
-    write(fd, buff, strlen(buff));
+void at_exit();
 
-    snprintf(buff, 99, "Times for %s mode with %d thread(s).\n", mode, threads_no);
-    write(fd, buff, strlen(buff));
-
-    for (int i=0;i<threads_no;i++) {
-        struct timespec* stat;
-        pthread_join(threads_ptrs[i], (void**)&stat);
-        if (stat != NULL) {
-            printf("Thread %d ended. Time taken: %ld s %ld ms %ld us.\n", i, stat->tv_sec, stat->tv_nsec/1000000, (stat->tv_nsec%1000000)/1000);
-            snprintf(buff, 99, "Time taken for thread %d: %ld s %ld ms %ld us.\n", i, stat->tv_sec, stat->tv_nsec/1000000, (stat->tv_nsec%1000000)/1000);
-            write(fd, buff, strlen(buff));    
-        }
-    }
-
-    struct timespec end_time;
-    clock_gettime(CLOCK_REALTIME, &end_time);
-
-    struct timespec time_taken;
-    subtract_times(&end_time, start_time, &time_taken);
-
-    printf("General time taken: %ld s %ld ms %ld us\n", time_taken.tv_sec, time_taken.tv_nsec/1000000, (time_taken.tv_nsec%1000000)/1000);
-    snprintf(buff, 99, "General time taken: %ld s %ld ms %ld us\n", time_taken.tv_sec, time_taken.tv_nsec/1000000, (time_taken.tv_nsec%1000000)/1000);
-    write(fd, buff, strlen(buff));
-
-    close(fd);
-}
-
-void subtract_times(struct timespec* x, struct timespec* y, struct timespec* res) {
-    
-    if (y->tv_nsec > x->tv_nsec) {
-        x->tv_nsec += 1000000000;
-        x->tv_sec -= 1;
-    }
-
-    res->tv_sec = x->tv_sec - y->tv_sec;
-    res->tv_nsec = x->tv_nsec - y->tv_nsec;
-}
-
-void at_exit() {
-    
-    for (int i=0;i<image_rows_no;i++) {
-        free(image[i]);
-    }
-
-    for (int i=0;i< threads_no;i++) {
-        free(histogram[i]);
-    }
-
-    free(image);
-    free(histogram);
-    free(threads_ptrs);
-}
 
 /*--------------------------------------------------------------*/
 
@@ -142,9 +87,7 @@ int main(int argc, char** argv) {
     }
 
     save_times_to_file(&tp, mode);
-
-    // add sigthreads mask to handle ctr + c
-
+    
     save_result_to(file_out, threads_no);
 
     at_exit();
@@ -369,4 +312,67 @@ void save_result_to(char* file_name, int threads_no) {
     }
 
     close(fd);
+}
+
+
+void save_times_to_file(struct timespec* start_time, char* mode) {
+
+    int fd = open("times.txt", O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+    char buff[100];
+    
+    snprintf(buff, 99, "-----------------------------------------------\n");
+    write(fd, buff, strlen(buff));
+
+    snprintf(buff, 99, "Times for %s mode with %d thread(s).\n", mode, threads_no);
+    write(fd, buff, strlen(buff));
+
+    for (int i=0;i<threads_no;i++) {
+        struct timespec* stat;
+        pthread_join(threads_ptrs[i], (void**)&stat);
+        if (stat != NULL) {
+            printf("Thread %d ended. Time taken: %ld s %ld ms %ld us.\n", i, stat->tv_sec, stat->tv_nsec/1000000, (stat->tv_nsec%1000000)/1000);
+            snprintf(buff, 99, "Time taken for thread %d: %ld s %ld ms %ld us.\n", i, stat->tv_sec, stat->tv_nsec/1000000, (stat->tv_nsec%1000000)/1000);
+            write(fd, buff, strlen(buff));    
+        }
+    }
+
+    struct timespec end_time;
+    clock_gettime(CLOCK_REALTIME, &end_time);
+
+    struct timespec time_taken;
+    subtract_times(&end_time, start_time, &time_taken);
+
+    printf("General time taken: %ld s %ld ms %ld us\n", time_taken.tv_sec, time_taken.tv_nsec/1000000, (time_taken.tv_nsec%1000000)/1000);
+    snprintf(buff, 99, "General time taken: %ld s %ld ms %ld us\n", time_taken.tv_sec, time_taken.tv_nsec/1000000, (time_taken.tv_nsec%1000000)/1000);
+    write(fd, buff, strlen(buff));
+
+    close(fd);
+}
+
+
+void subtract_times(struct timespec* x, struct timespec* y, struct timespec* res) {
+    
+    if (y->tv_nsec > x->tv_nsec) {
+        x->tv_nsec += 1000000000;
+        x->tv_sec -= 1;
+    }
+
+    res->tv_sec = x->tv_sec - y->tv_sec;
+    res->tv_nsec = x->tv_nsec - y->tv_nsec;
+}
+
+
+void at_exit() {
+    
+    for (int i=0;i<image_rows_no;i++) {
+        free(image[i]);
+    }
+
+    for (int i=0;i< threads_no;i++) {
+        free(histogram[i]);
+    }
+
+    free(image);
+    free(histogram);
+    free(threads_ptrs);
 }
