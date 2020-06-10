@@ -1,4 +1,4 @@
-# Wątki
+# Wątki - podstawy
 ## Zadanie 1
 Napisz program współbieżnie wyliczający histogram dla obrazu o wymiarze nxm przy użyciu wątków, zakładając, że obraz jest macierzą reprezentującą obraz. Dla uproszczenia rozważamy jedynie obrazy w 256 odcieniach szarości. Każdy element macierzy jest więc liczbą całkowitą z zakresu 0 do 255. Program należy zaimplementować w różnych wariantach:
 
