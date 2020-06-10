@@ -38,5 +38,5 @@ Kolejni pracownicy są uruchamiani w pętli przez jeden proces macierzysty (za p
 
 Zrealizuj powyższy problem synchronizacyjny , wykorzystując mechanizmy synchronizacji procesów oraz pamięć współdzieloną ze standardu:
 
-1. IPC - System V (50%)
-2. IPC - Posix (50%)
+1. IPC - System V
+2. IPC - Posix

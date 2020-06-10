@@ -57,7 +57,7 @@ reserveSem(int semId, int semNum)
     /* Ustaw odpowiednie pola struktury sops i wykonaj 
        operacje na semaforze semid*/
 
-    semop(semId, &sops, sizeof(sops));
+    semop(semId, &sops, 1);
 
     return 0;
 }
@@ -73,7 +73,7 @@ releaseSem(int semId, int semNum)
     sops.sem_op = 1;
     sops.sem_flg = 0;
 
-    return semop(semId, &sops, sizeof(sops));
+    return semop(semId, &sops, 1);
 }
 
 

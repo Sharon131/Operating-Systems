@@ -21,10 +21,10 @@ int ipconnect(int sock, char *ip_addr, short port) {
 
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_port = port;
-    //addr.sin_addr.s_addr = inet_addr(ip_addr);
-    int code = inet_aton(ip_addr, &addr.sin_addr);
-    printf("Code: %d\n", code);
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = inet_addr(ip_addr);
+    //int code = inet_aton(ip_addr, &addr.sin_addr);
+    //printf("Code: %d\n", code);
 
     connect(sock, (struct sockaddr*)&addr, sizeof(addr));
 }
