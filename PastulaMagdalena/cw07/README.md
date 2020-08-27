@@ -7,7 +7,9 @@
 
 ## POSIX:
 `<sys/mman.h>` - shm_open, shm_close, shm_unlink, mmap, munmap
-Zadanie
+
+# Zadanie
+
 Wykorzystując semafory i pamięć wspólną z IPC Systemu V napisz program symulujący działanie sklepu wysyłkowego.
 W sklepie wysyłkowym pracują 3 typy pracowników:
 1) odbierający zamówienie oraz przygotowujący odpowiednie paczki
